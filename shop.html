@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — aura.</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="announcement-bar"><span data-ann></span></div>
+
+<nav class="navbar">
+  <button id="hamburger" class="nav-icon-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <a href="index.html" class="nav-brand" data-brand></a>
+  <ul class="nav-links">
+    <li><a href="shop.html" style="color:var(--black)">Shop</a></li>
+    <li><a href="shop.html?cat=feminine">Feminine</a></li>
+    <li><a href="shop.html?cat=masculine">Masculine</a></li>
+    <li><a href="shop.html?cat=all">Gifts</a></li>
+  </ul>
+  <div class="nav-icons">
+    <button class="nav-icon-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button id="cart-icon" class="nav-icon-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span id="cart-count"></span>
+    </button>
+  </div>
+</nav>
+
+<div id="mobile-nav">
+  <div class="mobile-nav-panel">
+    <div class="mobile-nav-header">
+      <span class="nav-brand" data-brand></span>
+      <button id="nav-close" class="nav-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="shop.html">Shop All</a></li>
+      <li><a href="shop.html?cat=feminine">Feminine</a></li>
+      <li><a href="shop.html?cat=masculine">Masculine</a></li>
+      <li><a href="shop.html?cat=all">Gifts</a></li>
+    </ul>
+  </div>
+</div>
+
+<div id="cart-overlay"></div>
+<div id="cart-sidebar">
+  <div class="cart-header">
+    <h3>Your Cart</h3>
+    <button id="close-cart" class="nav-icon-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total</span><span>IDR <span id="cart-total">0</span></span></div>
+    <button class="btn btn-dark btn-full">Checkout</button>
+  </div>
+</div>
+
+<!-- SHOP HERO -->
+<div class="shop-hero">
+  <div class="shop-hero-bg" id="shop-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1594897030264-ab7d87efc473?w=1200&q=80')"></div>
+  <div class="shop-hero-content">
+    <h1 id="shop-hero-title">Discover Our Collection</h1>
+    <p id="shop-hero-sub">Our fragrances are completely genderless — wear what speaks to you.</p>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="section">
+  <div class="container">
+    <div class="shop-toolbar">
+      <div class="filter-tabs">
+        <button class="filter-btn active" data-cat="all">All</button>
+        <button class="filter-btn" data-cat="feminine">Feminine</button>
+        <button class="filter-btn" data-cat="masculine">Masculine</button>
+      </div>
+      <select class="sort-select" id="sort-select">
+        <option value="">Sort</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name">Name A-Z</option>
+      </select>
+    </div>
+    <div id="shop-products" class="product-grid"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="brand" data-brand></span>
+        <p id="footer-about"></p>
+        <div class="social-links">
+          <a href="#" class="social-link">f</a>
+          <a href="#" class="social-link">tw</a>
+          <a href="#" class="social-link">ig</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Help & FAQs</h4>
+        <ul>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Return & Exchange</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>About</h4>
+        <ul>
+          <li><a href="#">Our Philosophy</a></li>
+          <li><a href="#">Our Ingredients</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Work With Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; <span data-brand></span> Perfumery</div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+(function(){
+  const d = DataManager.get();
+  document.getElementById('footer-about').textContent = d.brand.about;
+
+  const params = new URLSearchParams(location.search);
+  const initCat = params.get('cat') || 'all';
+
+  let currentCat = initCat;
+  let currentSort = '';
+
+  // Set active filter
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    if (btn.dataset.cat === initCat) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+
+  // Update shop hero based on category
+  if(initCat === 'feminine'){
+    document.getElementById('shop-hero-title').textContent = 'Discover Our Feminine Fragrances';
+    document.getElementById('shop-hero-bg').style.backgroundImage = "url('https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=1200&q=80')";
+  } else if(initCat === 'masculine'){
+    document.getElementById('shop-hero-title').textContent = 'Discover Our Masculine Fragrances';
+    document.getElementById('shop-hero-bg').style.backgroundImage = "url('https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=1200&q=80')";
+  }
+
+  function render(){
+    let prods = d.products.filter(p => currentCat === 'all' || p.category === currentCat || p.category === 'all');
+    if(currentSort === 'price-asc') prods.sort((a,b) => a.price - b.price);
+    if(currentSort === 'price-desc') prods.sort((a,b) => b.price - a.price);
+    if(currentSort === 'name') prods.sort((a,b) => a.name.localeCompare(b.name));
+    document.getElementById('shop-products').innerHTML = prods.map(p => `
+      <div class="product-card fade-in" onclick="location.href='product.html?id=${p.id}'">
+        <div class="product-img-wrap">
+          <img src="${p.image}" alt="${p.name}" loading="lazy">
+          ${p.badge ? `<span class="product-badge ${p.badge==='Sold out'?'badge-sold':p.badge==='NEW'?'badge-new':'badge-best'}">${p.badge}</span>` : ''}
+          <div class="product-overlay">
+            <button class="btn" style="background:rgba(255,255,255,0.9);color:#000;border:none;width:100%;font-size:12px" onclick="event.stopPropagation();addToCart(${p.id})">
+              ${p.stock ? 'Add to Cart' : 'Sold Out'}
+            </button>
+          </div>
+        </div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-price">
+          IDR ${fmt(p.price)}
+          ${p.originalPrice ? `<span class="product-original">IDR ${fmt(p.originalPrice)}</span>` : ''}
+        </div>
+      </div>`).join('');
+    // re-observe
+    const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.05});
+    document.querySelectorAll('#shop-products .fade-in').forEach(el => obs.observe(el));
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentCat = btn.dataset.cat;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    });
+  });
+
+  document.getElementById('sort-select').addEventListener('change', e => {
+    currentSort = e.target.value;
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

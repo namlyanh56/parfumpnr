@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — aura.</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { background: #f0ede8; }
+  .modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:none;align-items:center;justify-content:center; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--white);border-radius:8px;padding:32px;width:min(600px,95vw);max-height:90vh;overflow-y:auto;position:relative; }
+  .modal-title { font-size:1.1rem;font-weight:700;margin-bottom:24px; }
+  .modal-close { position:absolute;top:16px;right:16px;font-size:20px;color:var(--gray);cursor:pointer; }
+  .color-swatch { width:24px;height:24px;border-radius:50%;display:inline-block;border:2px solid transparent;cursor:pointer;margin-right:6px; }
+  .color-swatch.active { border-color:var(--black); }
+  .img-preview { width:100%;height:180px;object-fit:cover;border-radius:var(--radius);margin-top:8px;display:none; }
+  .switch { position:relative;display:inline-block;width:48px;height:26px; }
+  .switch input { opacity:0;width:0;height:0; }
+  .slider { position:absolute;cursor:pointer;inset:0;background:#ccc;border-radius:26px;transition:.3s; }
+  .slider:before { content:'';position:absolute;width:20px;height:20px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.3s; }
+  input:checked + .slider { background:var(--sage); }
+  input:checked + .slider:before { transform:translateX(22px); }
+  .admin-login { min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--black); }
+  .login-card { background:var(--white);padding:48px;border-radius:12px;width:340px;text-align:center; }
+  .login-card h2 { font-size:1.8rem;margin-bottom:8px; }
+  .login-card p { color:var(--gray);margin-bottom:32px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="admin-login" id="login-screen">
+  <div class="login-card">
+    <h2 style="font-family:var(--font-serif)">aura.</h2>
+    <p>Admin Dashboard</p>
+    <div class="form-group"><label>Username</label><input type="text" id="login-user" value="admin"></div>
+    <div class="form-group"><label>Password</label><input type="password" id="login-pass" placeholder="Enter password"></div>
+    <button class="btn btn-dark btn-full" onclick="doLogin()">Sign In</button>
+    <p style="font-size:12px;color:var(--gray);margin-top:16px">Default password: <strong>aura2025</strong></p>
+  </div>
+</div>
+
+<!-- ADMIN LAYOUT -->
+<div class="admin-layout" id="admin-app" style="display:none">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">aura. <span>admin</span></div>
+    <ul class="admin-nav">
+      <li><a href="#" class="active" data-panel="dashboard" onclick="switchPanel('dashboard',this)"><span class="icon">📊</span> Dashboard</a></li>
+      <li><a href="#" data-panel="products" onclick="switchPanel('products',this)"><span class="icon">🧴</span> Products</a></li>
+      <li><a href="#" data-panel="homepage" onclick="switchPanel('homepage',this)"><span class="icon">🏠</span> Homepage</a></li>
+      <li><a href="#" data-panel="brand" onclick="switchPanel('brand',this)"><span class="icon">✏️</span> Brand</a></li>
+      <li><a href="#" data-panel="testimonials" onclick="switchPanel('testimonials',this)"><span class="icon">💬</span> Testimonials</a></li>
+      <li style="margin-top:auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px">
+        <a href="index.html" target="_blank"><span class="icon">🌐</span> View Site</a>
+      </li>
+      <li><a href="#" onclick="doLogout()"><span class="icon">🚪</span> Logout</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h2 id="panel-title">Dashboard</h2>
+      <div class="admin-topbar-actions">
+        <button class="btn btn-outline" style="padding:8px 16px;font-size:12px" onclick="resetData()">Reset to Default</button>
+        <button class="btn btn-sage" style="padding:8px 16px;font-size:12px" onclick="showToastAdmin('Changes auto-saved!')">✓ Saved</button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- DASHBOARD -->
+      <div id="panel-dashboard" class="admin-panel active">
+        <div class="stats-grid">
+          <div class="stat-card"><span class="stat-icon">🧴</span><div class="stat-value" id="stat-products">0</div><div class="stat-label">Total Products</div></div>
+          <div class="stat-card"><span class="stat-icon">✅</span><div class="stat-value" id="stat-instock">0</div><div class="stat-label">In Stock</div></div>
+          <div class="stat-card"><span class="stat-icon">💬</span><div class="stat-value" id="stat-reviews">0</div><div class="stat-label">Reviews</div></div>
+          <div class="stat-card"><span class="stat-icon">🌿</span><div class="stat-value">100%</div><div class="stat-label">Natural Ingredients</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Quick Preview</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap" id="dash-products"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Recent Activity</div>
+          <p style="color:var(--gray);font-size:14px">All changes are saved automatically to local storage. <a href="index.html" target="_blank" style="color:var(--sage)">View your live site →</a></p>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div id="panel-products" class="admin-panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <h3>Manage Products</h3>
+          <button class="btn btn-sage" style="padding:10px 20px;font-size:13px" onclick="openProductModal()">+ Add Product</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table class="products-table">
+            <thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Category</th><th>Stock</th><th>Badge</th><th>Actions</th></tr></thead>
+            <tbody id="products-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- HOMEPAGE -->
+      <div id="panel-homepage" class="admin-panel">
+        <div class="card">
+          <div class="card-title">Hero Section</div>
+          <div class="form-group"><label>Hero Title</label><input type="text" id="hero-title" oninput="autoSave()"></div>
+          <div class="form-group"><label>Hero Subtitle</label><input type="text" id="hero-subtitle" oninput="autoSave()"></div>
+          <div class="form-group"><label>CTA Button Text</label><input type="text" id="hero-cta" oninput="autoSave()"></div>
+          <div class="form-group"><label>Hero Image URL</label><input type="url" id="hero-image" oninput="previewImg('hero-image','hero-img-prev'); autoSave()"><img id="hero-img-prev" class="img-preview"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Featured Section</div>
+          <div class="form-group"><label>Title</label><input type="text" id="feat-title" oninput="autoSave()"></div>
+          <div class="form-group"><label>Description</label><textarea id="feat-desc" oninput="autoSave()"></textarea></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Try First Section</div>
+          <div class="form-group"><label>Title</label><input type="text" id="try-title" oninput="autoSave()"></div>
+          <div class="form-group"><label>Description</label><textarea id="try-desc" oninput="autoSave()"></textarea></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Press / Media Mentions (comma-separated)</div>
+          <div class="form-group"><input type="text" id="press-list" oninput="autoSave()"></div>
+        </div>
+      </div>
+
+      <!-- BRAND -->
+      <div id="panel-brand" class="admin-panel">
+        <div class="card">
+          <div class="card-title">Brand Settings</div>
+          <div class="form-group"><label>Brand Name</label><input type="text" id="brand-name" oninput="autoSave()"></div>
+          <div class="form-group"><label>Announcement Bar Text</label><input type="text" id="brand-ann" oninput="autoSave()"></div>
+          <div class="form-group"><label>About Text (shown in footer)</label><textarea id="brand-about" oninput="autoSave()"></textarea></div>
+          <div class="form-group"><label>Email</label><input type="email" id="brand-email" oninput="autoSave()"></div>
+        </div>
+      </div>
+
+      <!-- TESTIMONIALS -->
+      <div id="panel-testimonials" class="admin-panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <h3>Testimonials</h3>
+          <button class="btn btn-sage" style="padding:10px 20px;font-size:13px" onclick="openTestimonialModal()">+ Add Review</button>
+        </div>
+        <div id="testimonials-list"></div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </main>
+</div><!-- /admin-layout -->
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal">
+    <span class="modal-close" onclick="closeModal('product-modal')">&times;</span>
+    <div class="modal-title" id="product-modal-title">Add Product</div>
+    <input type="hidden" id="edit-id">
+    <div class="form-row">
+      <div class="form-group"><label>Product Name</label><input type="text" id="p-name"></div>
+      <div class="form-group"><label>Price (IDR)</label><input type="number" id="p-price"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Original Price (0 = none)</label><input type="number" id="p-orig"></div>
+      <div class="form-group"><label>Category</label>
+        <select id="p-cat"><option value="feminine">Feminine</option><option value="masculine">Masculine</option><option value="all">All / Gift</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Badge (leave empty for none)</label>
+        <select id="p-badge"><option value="">No Badge</option><option value="NEW">NEW</option><option value="Sold out">Sold out</option><option value="BEST VALUE">BEST VALUE</option></select>
+      </div>
+      <div class="form-group"><label>In Stock</label><br><label class="switch" style="margin-top:8px"><input type="checkbox" id="p-stock" checked><span class="slider"></span></label></div>
+    </div>
+    <div class="form-group"><label>Image URL</label><input type="url" id="p-img" oninput="previewImg('p-img','p-img-prev')"><img id="p-img-prev" class="img-preview"></div>
+    <div class="form-group"><label>Description</label><textarea id="p-desc"></textarea></div>
+    <div class="form-group"><label>Fragrance Notes (comma-separated)</label><input type="text" id="p-notes" placeholder="e.g. Rose, Musk, Amber"></div>
+    <div class="form-row">
+      <div class="form-group"><label>The Vibe</label><input type="text" id="p-vibe"></div>
+      <div class="form-group"><label>The Tune</label><input type="text" id="p-tune"></div>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px">
+      <button class="btn btn-outline" onclick="closeModal('product-modal')">Cancel</button>
+      <button class="btn btn-sage" onclick="saveProduct()">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIAL MODAL -->
+<div class="modal-overlay" id="testimonial-modal">
+  <div class="modal">
+    <span class="modal-close" onclick="closeModal('testimonial-modal')">&times;</span>
+    <div class="modal-title">Add Testimonial</div>
+    <input type="hidden" id="t-edit-idx">
+    <div class="form-group"><label>Customer Name</label><input type="text" id="t-name"></div>
+    <div class="form-group"><label>Rating (1-5)</label><input type="number" id="t-rating" min="1" max="5" value="5"></div>
+    <div class="form-group"><label>Review Text</label><textarea id="t-text"></textarea></div>
+    <div class="form-group"><label>Date</label><input type="text" id="t-date" placeholder="e.g. April 2025"></div>
+    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px">
+      <button class="btn btn-outline" onclick="closeModal('testimonial-modal')">Cancel</button>
+      <button class="btn btn-sage" onclick="saveTestimonial()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+<script>
+// Auth
+function doLogin(){
+  const u=document.getElementById('login-user').value;
+  const p=document.getElementById('login-pass').value;
+  if(u==='admin' && p==='aura2025'){
+    sessionStorage.setItem('aura_admin','1');
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('admin-app').style.display='flex';
+    initAdmin();
+  } else { showToastAdmin('Wrong credentials','error'); }
+}
+function doLogout(){ sessionStorage.removeItem('aura_admin'); location.reload(); }
+document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+if(sessionStorage.getItem('aura_admin')==='1'){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('admin-app').style.display='flex';
+  document.addEventListener('DOMContentLoaded', initAdmin);
+}
+
+// Panels
+function switchPanel(id, el){
+  event.preventDefault();
+  document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+id)?.classList.add('active');
+  document.querySelectorAll('.admin-nav a').forEach(a=>a.classList.remove('active'));
+  el.classList.add('active');
+  const titles={dashboard:'Dashboard',products:'Products',homepage:'Homepage',brand:'Brand Settings',testimonials:'Testimonials'};
+  document.getElementById('panel-title').textContent = titles[id]||id;
+  if(id==='products') renderProductsTable();
+  if(id==='homepage') loadHomepageForm();
+  if(id==='brand') loadBrandForm();
+  if(id==='testimonials') renderTestimonials();
+}
+
+function initAdmin(){
+  const d=DataManager.get();
+  document.getElementById('stat-products').textContent=d.products.length;
+  document.getElementById('stat-instock').textContent=d.products.filter(p=>p.stock).length;
+  document.getElementById('stat-reviews').textContent=d.testimonials.length;
+  document.getElementById('dash-products').innerHTML=d.products.slice(0,4).map(p=>`
+    <div style="width:120px;cursor:pointer" onclick="switchPanel('products',document.querySelector('[data-panel=products]'))">
+      <img src="${p.image}" style="width:120px;height:120px;object-fit:cover;border-radius:6px">
+      <p style="font-size:13px;margin-top:6px;font-weight:600">${p.name}</p>
+      <p style="font-size:12px;color:var(--gray)">IDR ${fmt(p.price)}</p>
+    </div>`).join('');
+}
+
+// Products Table
+function renderProductsTable(){
+  const d=DataManager.get();
+  document.getElementById('products-tbody').innerHTML=d.products.map(p=>`
+    <tr>
+      <td><img src="${p.image}" alt="${p.name}"></td>
+      <td><strong>${p.name}</strong></td>
+      <td>IDR ${fmt(p.price)}</td>
+      <td>${p.category}</td>
+      <td><span class="badge-pill ${p.stock?'badge-active':'badge-soldout'}">${p.stock?'In Stock':'Sold Out'}</span></td>
+      <td>${p.badge||'—'}</td>
+      <td><div class="table-actions">
+        <button class="action-btn action-edit" onclick="openProductModal(${p.id})">Edit</button>
+        <button class="action-btn action-delete" onclick="deleteProduct(${p.id})">Delete</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function openProductModal(id){
+  document.getElementById('product-modal-title').textContent = id ? 'Edit Product' : 'Add Product';
+  document.getElementById('edit-id').value = id||'';
+  document.getElementById('p-img-prev').style.display='none';
+  if(id){
+    const p=DataManager.get().products.find(p=>p.id===id);
+    document.getElementById('p-name').value=p.name;
+    document.getElementById('p-price').value=p.price;
+    document.getElementById('p-orig').value=p.originalPrice||0;
+    document.getElementById('p-cat').value=p.category;
+    document.getElementById('p-badge').value=p.badge||'';
+    document.getElementById('p-stock').checked=p.stock;
+    document.getElementById('p-img').value=p.image;
+    document.getElementById('p-desc').value=p.description;
+    document.getElementById('p-notes').value=p.notes.join(', ');
+    document.getElementById('p-vibe').value=p.vibe||'';
+    document.getElementById('p-tune').value=p.tune||'';
+    previewImg('p-img','p-img-prev');
+  } else {
+    ['p-name','p-price','p-orig','p-img','p-desc','p-notes','p-vibe','p-tune'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('p-stock').checked=true;
+    document.getElementById('p-badge').value='';
+    document.getElementById('p-orig').value=0;
+  }
+  document.getElementById('product-modal').classList.add('open');
+}
+
+function saveProduct(){
+  const d=DataManager.get();
+  const id=document.getElementById('edit-id').value;
+  const product={
+    id: id ? parseInt(id) : Date.now(),
+    name: document.getElementById('p-name').value,
+    price: parseInt(document.getElementById('p-price').value)||0,
+    originalPrice: parseInt(document.getElementById('p-orig').value)||0,
+    category: document.getElementById('p-cat').value,
+    badge: document.getElementById('p-badge').value,
+    stock: document.getElementById('p-stock').checked,
+    image: document.getElementById('p-img').value||'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=600&q=80',
+    description: document.getElementById('p-desc').value,
+    notes: document.getElementById('p-notes').value.split(',').map(s=>s.trim()).filter(Boolean),
+    vibe: document.getElementById('p-vibe').value,
+    tune: document.getElementById('p-tune').value
+  };
+  if(!product.name){ showToastAdmin('Product name is required','error'); return; }
+  if(id){ const idx=d.products.findIndex(p=>p.id===parseInt(id)); if(idx!==-1) d.products[idx]=product; }
+  else d.products.push(product);
+  DataManager.save(d);
+  closeModal('product-modal');
+  renderProductsTable();
+  showToastAdmin('Product saved!');
+}
+
+function deleteProduct(id){
+  if(!confirm('Delete this product?')) return;
+  const d=DataManager.get();
+  d.products=d.products.filter(p=>p.id!==id);
+  DataManager.save(d);
+  renderProductsTable();
+  showToastAdmin('Product deleted.');
+}
+
+// Homepage Form
+function loadHomepageForm(){
+  const d=DataManager.get();
+  document.getElementById('hero-title').value=d.hero.title;
+  document.getElementById('hero-subtitle').value=d.hero.subtitle;
+  document.getElementById('hero-cta').value=d.hero.cta;
+  document.getElementById('hero-image').value=d.hero.image;
+  document.getElementById('feat-title').value=d.sections.featuredTitle;
+  document.getElementById('feat-desc').value=d.sections.featuredDesc;
+  document.getElementById('try-title').value=d.sections.tryTitle;
+  document.getElementById('try-desc').value=d.sections.tryDesc;
+  document.getElementById('press-list').value=d.sections.press.join(', ');
+  previewImg('hero-image','hero-img-prev');
+}
+
+// Brand Form
+function loadBrandForm(){
+  const d=DataManager.get();
+  document.getElementById('brand-name').value=d.brand.name;
+  document.getElementById('brand-ann').value=d.brand.announcement;
+  document.getElementById('brand-about').value=d.brand.about;
+  document.getElementById('brand-email').value=d.brand.email||'';
+}
+
+// Auto-save
+let saveTimer;
+function autoSave(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{
+    const d=DataManager.get();
+    // hero
+    if(document.getElementById('hero-title')) {
+      d.hero.title=document.getElementById('hero-title').value;
+      d.hero.subtitle=document.getElementById('hero-subtitle').value;
+      d.hero.cta=document.getElementById('hero-cta').value;
+      d.hero.image=document.getElementById('hero-image').value;
+    }
+    if(document.getElementById('feat-title')) {
+      d.sections.featuredTitle=document.getElementById('feat-title').value;
+      d.sections.featuredDesc=document.getElementById('feat-desc').value;
+      d.sections.tryTitle=document.getElementById('try-title').value;
+      d.sections.tryDesc=document.getElementById('try-desc').value;
+      d.sections.press=document.getElementById('press-list').value.split(',').map(s=>s.trim()).filter(Boolean);
+    }
+    if(document.getElementById('brand-name')) {
+      d.brand.name=document.getElementById('brand-name').value;
+      d.brand.announcement=document.getElementById('brand-ann').value;
+      d.brand.about=document.getElementById('brand-about').value;
+      d.brand.email=document.getElementById('brand-email').value;
+    }
+    DataManager.save(d);
+    showToastAdmin('Auto-saved ✓');
+  },800);
+}
+
+// Testimonials
+function renderTestimonials(){
+  const d=DataManager.get();
+  document.getElementById('testimonials-list').innerHTML=d.testimonials.map((t,i)=>`
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <strong>${t.name}</strong> <span style="color:var(--gold)">${'★'.repeat(t.rating)}</span>
+          <p style="color:var(--gray);font-size:14px;margin-top:6px">"${t.text}"</p>
+          <p style="font-size:12px;color:var(--gray);margin-top:4px">${t.date}</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="action-btn action-edit" onclick="editTestimonial(${i})">Edit</button>
+          <button class="action-btn action-delete" onclick="deleteTestimonial(${i})">Delete</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function openTestimonialModal(){ document.getElementById('t-edit-idx').value=''; ['t-name','t-text','t-date'].forEach(id=>document.getElementById(id).value=''); document.getElementById('t-rating').value=5; document.getElementById('testimonial-modal').classList.add('open'); }
+
+function editTestimonial(i){ const t=DataManager.get().testimonials[i]; document.getElementById('t-edit-idx').value=i; document.getElementById('t-name').value=t.name; document.getElementById('t-rating').value=t.rating; document.getElementById('t-text').value=t.text; document.getElementById('t-date').value=t.date; document.getElementById('testimonial-modal').classList.add('open'); }
+
+function saveTestimonial(){ const d=DataManager.get(); const i=document.getElementById('t-edit-idx').value; const t={name:document.getElementById('t-name').value,rating:parseInt(document.getElementById('t-rating').value),text:document.getElementById('t-text').value,date:document.getElementById('t-date').value}; if(!t.name||!t.text){showToastAdmin('Fill in name and text','error');return;} if(i!=='') d.testimonials[parseInt(i)]=t; else d.testimonials.push(t); DataManager.save(d); closeModal('testimonial-modal'); renderTestimonials(); showToastAdmin('Saved!'); }
+
+function deleteTestimonial(i){ if(!confirm('Delete?')) return; const d=DataManager.get(); d.testimonials.splice(i,1); DataManager.save(d); renderTestimonials(); }
+
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+function previewImg(inputId, previewId){ const v=document.getElementById(inputId).value; const img=document.getElementById(previewId); if(v){ img.src=v; img.style.display='block'; } else { img.style.display='none'; } }
+
+function resetData(){ if(confirm('Reset all data to defaults? This cannot be undone.')) { DataManager.reset(); showToastAdmin('Reset complete. Reloading...'); setTimeout(()=>location.reload(),1000); } }
+
+function showToastAdmin(msg, t='ok'){ const el=document.createElement('div'); el.className='toast'+(t==='error'?' toast-error':''); el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.classList.add('show'),10); setTimeout(()=>{ el.classList.remove('show'); setTimeout(()=>el.remove(),300); },2200); }
+</script>
+</body>
+</html>

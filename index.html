@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>aura. — Smell Like You Mean It</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ANNOUNCEMENT -->
+<div class="announcement-bar"><span data-ann></span></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <button id="hamburger" class="nav-icon-btn" aria-label="Menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <a href="index.html" class="nav-brand" data-brand></a>
+  <ul class="nav-links">
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="shop.html?cat=feminine">Feminine</a></li>
+    <li><a href="shop.html?cat=masculine">Masculine</a></li>
+    <li><a href="shop.html?cat=all">Gifts</a></li>
+  </ul>
+  <div class="nav-icons">
+    <button class="nav-icon-btn" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button id="cart-icon" class="nav-icon-btn" aria-label="Cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span id="cart-count"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div id="mobile-nav">
+  <div class="mobile-nav-panel">
+    <div class="mobile-nav-header">
+      <span class="nav-brand" data-brand></span>
+      <button id="nav-close" class="nav-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <ul class="mobile-nav-links">
+      <li><a href="shop.html">Shop All</a></li>
+      <li><a href="shop.html?cat=feminine">Feminine</a></li>
+      <li><a href="shop.html?cat=masculine">Masculine</a></li>
+      <li><a href="shop.html?cat=all">Gifts</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- CART SIDEBAR -->
+<div id="cart-overlay"></div>
+<div id="cart-sidebar">
+  <div class="cart-header">
+    <h3>Your Cart</h3>
+    <button id="close-cart" class="nav-icon-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span>Total</span>
+      <span>IDR <span id="cart-total">0</span></span>
+    </div>
+    <button class="btn btn-dark btn-full">Checkout</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-content">
+    <h1 id="hero-title"></h1>
+    <p id="hero-subtitle"></p>
+    <a href="shop.html" class="btn btn-outline" style="background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.5);backdrop-filter:blur(8px)" id="hero-cta"></a>
+  </div>
+</section>
+
+<!-- FEATURED BANNER -->
+<section class="featured-banner fade-in" id="featured-section">
+  <div class="featured-img">
+    <img src="https://images.unsplash.com/photo-1547887538-e1d4ab6d2e90?w=800&q=80" alt="Fragrance collection">
+  </div>
+  <div class="featured-text">
+    <div class="featured-text-inner">
+      <h2 id="featured-title"></h2>
+      <p id="featured-desc"></p>
+      <a href="shop.html" class="btn btn-dark">Start Layering</a>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="section product-tabs-section">
+  <div class="container">
+    <div class="tab-header">
+      <button class="tab-btn active" data-tab="feminine">Feminine</button>
+      <button class="tab-btn" data-tab="masculine">Masculine</button>
+    </div>
+    <div id="home-products" class="product-grid"></div>
+    <div style="text-align:center;margin-top:40px">
+      <a href="shop.html" class="btn btn-outline">View All Products</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRY FIRST -->
+<section class="section" style="background:var(--cream)">
+  <div class="container">
+    <div class="try-section fade-in">
+      <div class="try-text">
+        <h2 id="try-title"></h2>
+        <p id="try-desc"></p>
+        <a href="shop.html" class="btn btn-sage">Discover More</a>
+      </div>
+      <div class="try-img">
+        <img src="https://images.unsplash.com/photo-1563170351-be82bc888aa4?w=700&q=80" alt="Sample kit">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRESS -->
+<section class="press-section">
+  <div class="press-track" id="press-track"></div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section fade-in">
+  <div class="container">
+    <h2 style="text-align:center;margin-bottom:40px">What They Say</h2>
+    <div class="testimonials-grid" id="testimonials"></div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust-bar fade-in">
+  <div class="container">
+    <div class="trust-grid">
+      <div class="trust-item"><div class="trust-icon">🔒</div><strong>Secure Payments</strong><span>Verified & encrypted transactions</span></div>
+      <div class="trust-item"><div class="trust-icon">🚚</div><strong>Free Shipping</strong><span>Orders above IDR 700.000</span></div>
+      <div class="trust-item"><div class="trust-icon">↩️</div><strong>Free Returns</strong><span>Hassle-free within 30 days</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<section class="section newsletter-section">
+  <div class="container">
+    <div class="newsletter-inner fade-in">
+      <h2>Wanna Be Pen Pals?</h2>
+      <p>Join the aura. crew and get exclusive deals, new launches, and fragrance inspiration.</p>
+      <div class="newsletter-form">
+        <input type="email" placeholder="Enter your email address">
+        <button class="btn btn-dark">Subscribe</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="brand" data-brand></span>
+        <p id="footer-about"></p>
+        <div class="social-links">
+          <a href="#" class="social-link">f</a>
+          <a href="#" class="social-link">tw</a>
+          <a href="#" class="social-link">ig</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Help & FAQs</h4>
+        <ul>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Return & Exchange</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>About</h4>
+        <ul>
+          <li><a href="#">Our Philosophy</a></li>
+          <li><a href="#">Our Ingredients</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Work With Us</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© <span data-brand></span> Perfumery. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+(function(){
+  const d = DataManager.get();
+
+  // Hero
+  document.getElementById('hero-bg').style.backgroundImage = `url('${d.hero.image}')`;
+  document.getElementById('hero-title').textContent = d.hero.title;
+  document.getElementById('hero-subtitle').textContent = d.hero.subtitle;
+  document.getElementById('hero-cta').textContent = d.hero.cta;
+
+  // Featured
+  document.getElementById('featured-title').textContent = d.sections.featuredTitle;
+  document.getElementById('featured-desc').textContent = d.sections.featuredDesc;
+
+  // Try
+  document.getElementById('try-title').textContent = d.sections.tryTitle;
+  document.getElementById('try-desc').textContent = d.sections.tryDesc;
+
+  // Footer about
+  document.getElementById('footer-about').textContent = d.brand.about;
+
+  // Press marquee
+  const track = document.getElementById('press-track');
+  const items = [...d.sections.press, ...d.sections.press];
+  track.innerHTML = items.map(p => `<span class="press-item">${p}</span>`).join('');
+
+  // Testimonials
+  document.getElementById('testimonials').innerHTML = d.testimonials.map(t =>
+    `<div class="testimonial-card fade-in">
+      <div class="stars">${'★'.repeat(t.rating)}</div>
+      <p>"${t.text}"</p>
+      <div class="testimonial-meta">${t.name} <span class="testimonial-date">· ${t.date}</span></div>
+    </div>`
+  ).join('');
+
+  // Products
+  const noteIcons = { "Peony":"🌸","Rose Otto":"🌹","Lychee":"🍈","Pink Pepper":"🌶","White Musk":"✨","Patchouli":"🌿","Iris":"💜","Violet":"🌸","Sandalwood":"🪵","Ambergris":"🌊","Bergamot":"🍊","Cashmere":"🧶","Vetiver":"🌾","Oakmoss":"🌲","Leather":"🟤","Tobacco":"🍂","Amber":"🟡","Cedar":"🌲","Oud":"🪵","Cardamom":"🌿","Saffron":"🌼","Vanilla":"🌾","Incense":"🕯","Musk":"✨" };
+
+  function renderProducts(cat){
+    const prods = d.products.filter(p => p.category === cat).slice(0,4);
+    return prods.map(p => `
+      <div class="product-card" onclick="location.href='product.html?id=${p.id}'">
+        <div class="product-img-wrap">
+          <img src="${p.image}" alt="${p.name}" loading="lazy">
+          ${p.badge ? `<span class="product-badge ${p.badge==='Sold out'?'badge-sold':p.badge==='NEW'?'badge-new':'badge-best'}">${p.badge}</span>` : ''}
+          <div class="product-overlay">
+            <button class="btn btn-outline" style="background:rgba(255,255,255,0.9);color:#000;border:none;width:100%" onclick="event.stopPropagation();addToCart(${p.id})">
+              ${p.stock ? 'Add to Cart' : 'Sold Out'}
+            </button>
+          </div>
+        </div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-price">
+          IDR ${fmt(p.price)}
+          ${p.originalPrice ? `<span class="product-original">IDR ${fmt(p.originalPrice)}</span>` : ''}
+        </div>
+      </div>`).join('');
+  }
+
+  const container = document.getElementById('home-products');
+  container.innerHTML = renderProducts('feminine');
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      container.innerHTML = renderProducts(btn.dataset.tab);
+    });
+  });
+})();
+</script>
+</body>
+</html>
