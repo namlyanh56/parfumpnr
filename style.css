@@ -629,6 +629,27 @@ input:checked + .slider:before { transform:translateX(20px); }
   .admin-sidebar { width: 210px; }
   .checkout-grid { grid-template-columns: 1fr; }
   .checkout-sidebar { position: static; }
+  /* FIX: Remove sticky on gallery so it doesn't float over product info */
+  .product-detail-gallery { position: static !important; }
+  /* FIX: Ensure product info renders fully at tablet */
+  .product-detail-info { min-width: 0; }
+  .detail-actions { display: flex; flex-direction: column; gap: 12px; }
+  .detail-actions .btn { display: flex; width: 100%; }
+}
+
+/* ===== TABLET (600–900px) — fills the gap between mobile and desktop ===== */
+@media (max-width: 860px) and (min-width: 601px) {
+  .shop-toolbar { flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px 0; }
+  .filter-tabs { flex-wrap: wrap; gap: 6px; }
+  .product-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+  .checkout-grid { grid-template-columns: 1fr; }
+  .form-row-2 { grid-template-columns: 1fr; }
+  .product-detail-grid { gap: 32px; padding: 40px 0; }
+  .qty-control { display: flex; }
+  .detail-actions .btn { display: flex; width: 100%; }
+  /* Make sure all product detail sections are visible */
+  .about-grid { grid-template-columns: 1fr; gap: 32px; }
+  .notes-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (max-width: 600px) {
@@ -646,4 +667,13 @@ input:checked + .slider:before { transform:translateX(20px); }
   .product-detail-grid { gap: 32px; }
   .notes-grid { grid-template-columns: repeat(3, 1fr); }
   .aab-sep, .aab-viewsite { display: none; }
+  /* FIX: Ensure product info buttons show on small mobile */
+  .qty-control { display: flex; }
+  .detail-actions { display: flex; flex-direction: column; gap: 12px; }
+  .detail-actions .btn { display: flex; width: 100%; }
+  .shop-toolbar { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .filter-tabs { flex-wrap: wrap; gap: 6px; }
+  /* FIX: product image shouldn't overflow and cover text */
+  .product-img-wrap { max-height: 360px; }
+  .product-detail-gallery img { max-height: 380px; object-fit: cover; }
 }
