@@ -11,7 +11,7 @@
 <div class="announcement-bar"><span data-ann></span></div>
 
 <nav class="navbar">
-  <button id="hamburger" class="nav-icon-btn">
+  <button id="hamburger" class="nav-icon-btn" aria-label="Menu">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
   <a href="index.html" class="nav-brand" data-brand></a>
@@ -22,10 +22,10 @@
     <li><a href="shop.html?cat=all">Gifts</a></li>
   </ul>
   <div class="nav-icons">
-    <button class="nav-icon-btn">
+    <button class="nav-icon-btn" aria-label="Search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </button>
-    <button id="cart-icon" class="nav-icon-btn">
+    <button id="cart-icon" class="nav-icon-btn" aria-label="Cart">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
       <span id="cart-count"></span>
     </button>
@@ -59,8 +59,8 @@
   </div>
   <div id="cart-items"></div>
   <div class="cart-footer">
-    <div class="cart-total-row"><span>Total</span><span>IDR <span id="cart-total">0</span></span></div>
-    <button class="btn btn-dark btn-full">Checkout</button>
+    <div class="cart-total-row"><span>Subtotal</span><span>IDR <span id="cart-total">0</span></span></div>
+    <a href="checkout.html" class="btn btn-dark btn-full" style="display:flex">Checkout</a>
   </div>
 </div>
 
@@ -81,19 +81,53 @@
         <button class="filter-btn active" data-cat="all">All</button>
         <button class="filter-btn" data-cat="feminine">Feminine</button>
         <button class="filter-btn" data-cat="masculine">Masculine</button>
+        <button class="filter-btn" data-cat-gift data-cat="all-gifts">Gifts</button>
       </div>
       <select class="sort-select" id="sort-select">
-        <option value="">Sort</option>
+        <option value="">Sort by</option>
         <option value="price-asc">Price: Low to High</option>
         <option value="price-desc">Price: High to Low</option>
-        <option value="name">Name A-Z</option>
+        <option value="name">Name A–Z</option>
       </select>
     </div>
+    <p id="product-count" style="font-size:13px;color:var(--gray);margin-bottom:24px;margin-top:-16px"></p>
     <div id="shop-products" class="product-grid"></div>
+    <div id="no-results" style="display:none;text-align:center;padding:60px 0;color:var(--gray)">
+      <p style="font-size:1.1rem">No products found.</p>
+      <button class="btn btn-outline" style="margin-top:16px" onclick="resetFilters()">Clear Filters</button>
+    </div>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="container">
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <strong>Secure Payments</strong>
+        <span>Verified &amp; encrypted</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 4v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <strong>Free Shipping</strong>
+        <span>Above IDR 700.000</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        </div>
+        <strong>Free Returns</strong>
+        <span>Within 30 days</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="container">
     <div class="footer-grid">
@@ -107,11 +141,11 @@
         </div>
       </div>
       <div class="footer-col">
-        <h4>Help & FAQs</h4>
+        <h4>Help &amp; FAQs</h4>
         <ul>
           <li><a href="#">Contact Us</a></li>
           <li><a href="#">FAQ</a></li>
-          <li><a href="#">Return & Exchange</a></li>
+          <li><a href="#">Return &amp; Exchange</a></li>
           <li><a href="#">Terms</a></li>
         </ul>
       </div>
@@ -125,7 +159,7 @@
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">&copy; <span data-brand></span> Perfumery</div>
+    <div class="footer-bottom">&copy; <span data-brand></span> Perfumery. All rights reserved.</div>
   </div>
 </footer>
 
@@ -138,54 +172,81 @@
   const params = new URLSearchParams(location.search);
   const initCat = params.get('cat') || 'all';
 
-  let currentCat = initCat;
+  let currentCat = initCat === 'all' ? 'all' : initCat;
+  let showGifts = initCat === 'all'; // treat 'all' as show-everything
   let currentSort = '';
 
-  // Set active filter
+  // Hero title per category
+  const heroTitles = {
+    feminine: { title: 'Feminine Fragrances', bg: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=1200&q=80' },
+    masculine: { title: 'Masculine Fragrances', bg: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=1200&q=80' },
+    all: { title: 'Discover Our Collection', bg: 'https://images.unsplash.com/photo-1594897030264-ab7d87efc473?w=1200&q=80' }
+  };
+  const cat = heroTitles[initCat] || heroTitles.all;
+  document.getElementById('shop-hero-title').textContent = cat.title;
+  document.getElementById('shop-hero-bg').style.backgroundImage = `url('${cat.bg}')`;
+
+  // Active filter btn
   document.querySelectorAll('.filter-btn').forEach(btn => {
-    if (btn.dataset.cat === initCat) btn.classList.add('active');
-    else btn.classList.remove('active');
+    const btnCat = btn.dataset.cat;
+    if (btnCat === initCat || (btnCat === 'all' && initCat === 'all')) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
   });
 
-  // Update shop hero based on category
-  if(initCat === 'feminine'){
-    document.getElementById('shop-hero-title').textContent = 'Discover Our Feminine Fragrances';
-    document.getElementById('shop-hero-bg').style.backgroundImage = "url('https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=1200&q=80')";
-  } else if(initCat === 'masculine'){
-    document.getElementById('shop-hero-title').textContent = 'Discover Our Masculine Fragrances';
-    document.getElementById('shop-hero-bg').style.backgroundImage = "url('https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=1200&q=80')";
+  function render() {
+    let prods = d.products.filter(p => {
+      if (currentCat === 'all') return true;
+      return p.category === currentCat || p.category === 'all';
+    });
+    if (currentSort === 'price-asc') prods.sort((a, b) => a.price - b.price);
+    if (currentSort === 'price-desc') prods.sort((a, b) => b.price - a.price);
+    if (currentSort === 'name') prods.sort((a, b) => a.name.localeCompare(b.name));
+
+    document.getElementById('product-count').textContent = `${prods.length} product${prods.length !== 1 ? 's' : ''}`;
+
+    if (prods.length === 0) {
+      document.getElementById('shop-products').innerHTML = '';
+      document.getElementById('no-results').style.display = 'block';
+    } else {
+      document.getElementById('no-results').style.display = 'none';
+      document.getElementById('shop-products').innerHTML = prods.map(p => `
+        <div class="product-card fade-in" onclick="location.href='product.html?id=${p.id}'">
+          <div class="product-img-wrap">
+            <img src="${p.image}" alt="${p.name}" loading="lazy">
+            ${p.badge ? `<span class="product-badge ${p.badge==='Sold out'?'badge-sold':p.badge==='NEW'?'badge-new':'badge-best'}">${p.badge}</span>` : ''}
+            <div class="product-overlay">
+              <button class="btn" style="background:rgba(255,255,255,0.92);color:#000;border:none;width:100%;font-size:12px" onclick="event.stopPropagation();addToCart(${p.id})">
+                ${p.stock ? 'Add to Cart' : 'Sold Out'}
+              </button>
+            </div>
+          </div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-price">
+            IDR ${fmt(p.price)}
+            ${p.originalPrice ? `<span class="product-original">IDR ${fmt(p.originalPrice)}</span>` : ''}
+          </div>
+        </div>`).join('');
+
+      const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.05 });
+      document.querySelectorAll('#shop-products .fade-in').forEach(el => obs.observe(el));
+    }
   }
 
-  function render(){
-    let prods = d.products.filter(p => currentCat === 'all' || p.category === currentCat || p.category === 'all');
-    if(currentSort === 'price-asc') prods.sort((a,b) => a.price - b.price);
-    if(currentSort === 'price-desc') prods.sort((a,b) => b.price - a.price);
-    if(currentSort === 'name') prods.sort((a,b) => a.name.localeCompare(b.name));
-    document.getElementById('shop-products').innerHTML = prods.map(p => `
-      <div class="product-card fade-in" onclick="location.href='product.html?id=${p.id}'">
-        <div class="product-img-wrap">
-          <img src="${p.image}" alt="${p.name}" loading="lazy">
-          ${p.badge ? `<span class="product-badge ${p.badge==='Sold out'?'badge-sold':p.badge==='NEW'?'badge-new':'badge-best'}">${p.badge}</span>` : ''}
-          <div class="product-overlay">
-            <button class="btn" style="background:rgba(255,255,255,0.9);color:#000;border:none;width:100%;font-size:12px" onclick="event.stopPropagation();addToCart(${p.id})">
-              ${p.stock ? 'Add to Cart' : 'Sold Out'}
-            </button>
-          </div>
-        </div>
-        <div class="product-name">${p.name}</div>
-        <div class="product-price">
-          IDR ${fmt(p.price)}
-          ${p.originalPrice ? `<span class="product-original">IDR ${fmt(p.originalPrice)}</span>` : ''}
-        </div>
-      </div>`).join('');
-    // re-observe
-    const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.05});
-    document.querySelectorAll('#shop-products .fade-in').forEach(el => obs.observe(el));
-  }
+  window.resetFilters = function() {
+    currentCat = 'all';
+    currentSort = '';
+    document.getElementById('sort-select').value = '';
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.filter-btn[data-cat="all"]').classList.add('active');
+    render();
+  };
 
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      currentCat = btn.dataset.cat;
+      currentCat = btn.dataset.cat === 'all-gifts' ? 'all' : btn.dataset.cat;
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       render();
