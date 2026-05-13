@@ -68,8 +68,8 @@
 <div class="shop-hero">
   <div class="shop-hero-bg" id="shop-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1594897030264-ab7d87efc473?w=1200&q=80')"></div>
   <div class="shop-hero-content">
-    <h1 id="shop-hero-title">Discover Our Collection</h1>
-    <p id="shop-hero-sub">Our fragrances are completely genderless — wear what speaks to you.</p>
+    <h1 id="shop-hero-title" data-ek="sections.shopHeroTitle">Discover Our Collection</h1>
+    <p id="shop-hero-sub" data-ek="sections.shopHeroSub">Our fragrances are completely genderless — wear what speaks to you.</p>
   </div>
 </div>
 
@@ -176,14 +176,15 @@
   let showGifts = initCat === 'all'; // treat 'all' as show-everything
   let currentSort = '';
 
-  // Hero title per category
+  // Hero title per category (all-tab uses admin-editable values)
   const heroTitles = {
     feminine: { title: 'Feminine Fragrances', bg: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=1200&q=80' },
     masculine: { title: 'Masculine Fragrances', bg: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=1200&q=80' },
-    all: { title: 'Discover Our Collection', bg: 'https://images.unsplash.com/photo-1594897030264-ab7d87efc473?w=1200&q=80' }
+    all: { title: d.sections.shopHeroTitle || 'Discover Our Collection', bg: d.sections.shopHeroImage || 'https://images.unsplash.com/photo-1594897030264-ab7d87efc473?w=1200&q=80' }
   };
   const cat = heroTitles[initCat] || heroTitles.all;
   document.getElementById('shop-hero-title').textContent = cat.title;
+  document.getElementById('shop-hero-sub').textContent = d.sections.shopHeroSub || 'Our fragrances are completely genderless — wear what speaks to you.';
   document.getElementById('shop-hero-bg').style.backgroundImage = `url('${cat.bg}')`;
 
   // Active filter btn
