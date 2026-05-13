@@ -227,9 +227,16 @@ body { background: #f0ede8; }
           <div class="form-group"><label>Hero Subtitle</label><input type="text" id="hero-subtitle" oninput="autoSave()"></div>
           <div class="form-group"><label>CTA Button Text</label><input type="text" id="hero-cta" oninput="autoSave()"></div>
           <div class="form-group">
-            <label>Hero Image URL</label>
-            <input type="url" id="hero-image" oninput="previewImg('hero-image','hero-img-prev');autoSave()" placeholder="https://..." autocomplete="off">
-            <p style="font-size:11px;color:var(--gray);margin-top:4px">Use a direct image URL. Must end in .jpg / .png / .webp or be a CDN link.</p>
+            <label>Hero Image</label>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
+              <input type="url" id="hero-image" oninput="previewImg('hero-image','hero-img-prev');autoSave()" placeholder="https://..." autocomplete="off" style="flex:1;min-width:0">
+              <label style="display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border:1px solid var(--gray-light);border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;background:var(--white);color:var(--black);transition:all 0.2s" onmouseover="this.style.borderColor='var(--sage)'" onmouseout="this.style.borderColor='var(--gray-light)'">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Upload
+                <input type="file" accept="image/*" style="display:none" onchange="handleLocalUpload(this,'hero-image','hero-img-prev',true)">
+              </label>
+            </div>
+            <p style="font-size:11px;color:var(--gray);margin-top:0">Paste a URL <em>or</em> upload directly from your device (auto-compressed).</p>
             <div id="hero-img-status" style="font-size:11px;margin-top:4px;display:none"></div>
             <img id="hero-img-prev" class="img-preview" style="border:1px solid var(--gray-light)">
           </div>
@@ -258,9 +265,16 @@ body { background: #f0ede8; }
           <div class="form-group"><label>Hero Title (All Products)</label><input type="text" id="shop-hero-title-inp" oninput="autoSave()" placeholder="Discover Our Collection"></div>
           <div class="form-group"><label>Hero Subtitle</label><input type="text" id="shop-hero-sub-inp" oninput="autoSave()" placeholder="Our fragrances are completely genderless..."></div>
           <div class="form-group">
-            <label>Hero Background Image URL</label>
-            <input type="url" id="shop-hero-img-inp" oninput="previewImg('shop-hero-img-inp','shop-hero-img-prev');autoSave()" placeholder="https://images.unsplash.com/..." autocomplete="off">
-            <p style="font-size:11px;color:var(--gray);margin-top:4px">Use a direct image URL (Unsplash, Cloudinary, Imgur, etc). Google Drive links won't work.</p>
+            <label>Hero Background Image</label>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
+              <input type="url" id="shop-hero-img-inp" oninput="previewImg('shop-hero-img-inp','shop-hero-img-prev');autoSave()" placeholder="https://images.unsplash.com/..." autocomplete="off" style="flex:1;min-width:0">
+              <label style="display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border:1px solid var(--gray-light);border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;background:var(--white);color:var(--black);transition:all 0.2s" onmouseover="this.style.borderColor='var(--sage)'" onmouseout="this.style.borderColor='var(--gray-light)'">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Upload
+                <input type="file" accept="image/*" style="display:none" onchange="handleLocalUpload(this,'shop-hero-img-inp','shop-hero-img-prev',true)">
+              </label>
+            </div>
+            <p style="font-size:11px;color:var(--gray);margin-top:0">Paste a URL <em>or</em> upload directly from your device (auto-compressed).</p>
             <div id="shop-hero-img-status" style="font-size:11px;margin-top:4px;display:none"></div>
             <img id="shop-hero-img-prev" class="img-preview" style="border:1px solid var(--gray-light)">
           </div>
@@ -385,9 +399,16 @@ body { background: #f0ede8; }
       </div>
     </div>
     <div class="form-group">
-      <label>Image URL</label>
-      <input type="url" id="p-img" oninput="previewImg('p-img','p-img-prev')" placeholder="https://images.unsplash.com/..." autocomplete="off">
-      <p style="font-size:11px;color:var(--gray);margin-top:4px">Use a direct image URL (Unsplash, Imgur, Cloudinary, etc). Google Drive links won't work.</p>
+      <label>Product Image</label>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
+        <input type="url" id="p-img" oninput="previewImg('p-img','p-img-prev')" placeholder="https://images.unsplash.com/..." autocomplete="off" style="flex:1;min-width:0">
+        <label style="display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border:1px solid var(--gray-light);border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;background:var(--white);color:var(--black);transition:all 0.2s" onmouseover="this.style.borderColor='var(--sage)'" onmouseout="this.style.borderColor='var(--gray-light)'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Upload
+          <input type="file" accept="image/*" style="display:none" onchange="handleLocalUpload(this,'p-img','p-img-prev')">
+        </label>
+      </div>
+      <p style="font-size:11px;color:var(--gray);margin-top:0">Paste a URL <em>or</em> upload directly from your device (auto-compressed to ~800px).</p>
       <div id="p-img-status" style="font-size:11px;margin-top:4px;display:none"></div>
       <img id="p-img-prev" class="img-preview" style="border:1px solid var(--gray-light)">
     </div>
@@ -425,6 +446,82 @@ body { background: #f0ede8; }
 
 <script src="main.js"></script>
 <script>
+/* ===== LOCAL IMAGE UPLOAD ===== */
+/**
+ * Compress an image File using Canvas, returning a base64 data-URI.
+ * maxWidth: resize down to this width if wider (preserves aspect ratio).
+ * quality: JPEG quality 0–1.
+ */
+function compressImage(file, maxWidth = 1200, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('FileReader failed'));
+    reader.onload = e => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Image decode failed'));
+      img.onload = () => {
+        let w = img.naturalWidth, h = img.naturalHeight;
+        if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+/**
+ * Handle a local file upload, compress it, inject the data-URI into the
+ * URL input, trigger a preview, and (optionally) auto-save.
+ *
+ * @param {HTMLInputElement} fileInput  - the <input type="file"> element
+ * @param {string} urlInputId           - id of the text/url input to update
+ * @param {string} previewId            - id of the <img> preview element
+ * @param {boolean} [triggerAutoSave]   - call autoSave() after update?
+ */
+async function handleLocalUpload(fileInput, urlInputId, previewId, triggerAutoSave = false) {
+  const file = fileInput.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    showToastAdmin('Please select an image file (JPG, PNG, WebP…)', 'error');
+    return;
+  }
+
+  const statusId = previewId.replace('-prev', '-status');
+  const statusEl = document.getElementById(statusId);
+  if (statusEl) {
+    statusEl.style.display = 'block';
+    statusEl.style.color = 'var(--gray)';
+    statusEl.textContent = '⏳ Processing image…';
+  }
+
+  try {
+    const dataURL = await compressImage(file);
+    const kb = Math.round(dataURL.length * 0.75 / 1024);
+    document.getElementById(urlInputId).value = dataURL;
+    previewImg(urlInputId, previewId);
+    if (statusEl) {
+      statusEl.style.display = 'block';
+      statusEl.style.color = '#1a6b3a';
+      statusEl.textContent = `✓ Uploaded & compressed (~${kb} KB stored in browser)`;
+    }
+    if (triggerAutoSave) autoSave();
+  } catch (err) {
+    console.error(err);
+    if (statusEl) {
+      statusEl.style.display = 'block';
+      statusEl.style.color = '#c0392b';
+      statusEl.textContent = '⚠ Could not process image. Try a different file.';
+    }
+    showToastAdmin('Image upload failed', 'error');
+  }
+  // Reset file input so the same file can be re-selected if needed
+  fileInput.value = '';
+}
+
 /* ===== AUTH ===== */
 function doLogin() {
   const u = document.getElementById('login-user').value;
