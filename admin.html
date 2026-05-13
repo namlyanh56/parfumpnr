@@ -93,6 +93,10 @@ body { background: #f0ede8; }
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         Homepage
       </a></li>
+      <li><a href="#" onclick="switchPanel('shop',this);return false">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Shop Page
+      </a></li>
       <li><a href="#" onclick="switchPanel('brand',this);return false">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
         Brand
@@ -224,8 +228,10 @@ body { background: #f0ede8; }
           <div class="form-group"><label>CTA Button Text</label><input type="text" id="hero-cta" oninput="autoSave()"></div>
           <div class="form-group">
             <label>Hero Image URL</label>
-            <input type="url" id="hero-image" oninput="previewImg('hero-image','hero-img-prev');autoSave()" placeholder="https://...">
-            <img id="hero-img-prev" class="img-preview">
+            <input type="url" id="hero-image" oninput="previewImg('hero-image','hero-img-prev');autoSave()" placeholder="https://..." autocomplete="off">
+            <p style="font-size:11px;color:var(--gray);margin-top:4px">Use a direct image URL. Must end in .jpg / .png / .webp or be a CDN link.</p>
+            <div id="hero-img-status" style="font-size:11px;margin-top:4px;display:none"></div>
+            <img id="hero-img-prev" class="img-preview" style="border:1px solid var(--gray-light)">
           </div>
         </div>
         <div class="card">
@@ -242,6 +248,23 @@ body { background: #f0ede8; }
           <div class="card-title">Press / Media Mentions</div>
           <p style="font-size:13px;color:var(--gray);margin-bottom:12px">Separate with commas. Example: VOGUE, ELLE, COSMOPOLITAN</p>
           <div class="form-group"><input type="text" id="press-list" oninput="autoSave()"></div>
+        </div>
+      </div>
+
+      <!-- SHOP PAGE -->
+      <div id="panel-shop" class="admin-panel">
+        <div class="card">
+          <div class="card-title">Shop Page Hero</div>
+          <div class="form-group"><label>Hero Title (All Products)</label><input type="text" id="shop-hero-title-inp" oninput="autoSave()" placeholder="Discover Our Collection"></div>
+          <div class="form-group"><label>Hero Subtitle</label><input type="text" id="shop-hero-sub-inp" oninput="autoSave()" placeholder="Our fragrances are completely genderless..."></div>
+          <div class="form-group">
+            <label>Hero Background Image URL</label>
+            <input type="url" id="shop-hero-img-inp" oninput="previewImg('shop-hero-img-inp','shop-hero-img-prev');autoSave()" placeholder="https://images.unsplash.com/..." autocomplete="off">
+            <p style="font-size:11px;color:var(--gray);margin-top:4px">Use a direct image URL (Unsplash, Cloudinary, Imgur, etc). Google Drive links won't work.</p>
+            <div id="shop-hero-img-status" style="font-size:11px;margin-top:4px;display:none"></div>
+            <img id="shop-hero-img-prev" class="img-preview" style="border:1px solid var(--gray-light)">
+          </div>
+          <p style="font-size:13px;color:var(--gray);margin-top:4px">Note: When visiting Shop via Feminine/Masculine links, their own title overrides. Only "All Products" uses the title above.</p>
         </div>
       </div>
 
@@ -363,8 +386,10 @@ body { background: #f0ede8; }
     </div>
     <div class="form-group">
       <label>Image URL</label>
-      <input type="url" id="p-img" oninput="previewImg('p-img','p-img-prev')" placeholder="https://images.unsplash.com/...">
-      <img id="p-img-prev" class="img-preview">
+      <input type="url" id="p-img" oninput="previewImg('p-img','p-img-prev')" placeholder="https://images.unsplash.com/..." autocomplete="off">
+      <p style="font-size:11px;color:var(--gray);margin-top:4px">Use a direct image URL (Unsplash, Imgur, Cloudinary, etc). Google Drive links won't work.</p>
+      <div id="p-img-status" style="font-size:11px;margin-top:4px;display:none"></div>
+      <img id="p-img-prev" class="img-preview" style="border:1px solid var(--gray-light)">
     </div>
     <div class="form-group"><label>Description</label><textarea id="p-desc" placeholder="Describe the scent, mood, occasion..."></textarea></div>
     <div class="form-group"><label>Fragrance Notes (comma-separated)</label><input type="text" id="p-notes" placeholder="e.g. Rose, Musk, Amber, Sandalwood"></div>
@@ -432,7 +457,7 @@ if (sessionStorage.getItem('aura_admin') === '1') {
 
 /* ===== PANELS ===== */
 const panelTitles = {
-  dashboard: 'Dashboard', products: 'Products', homepage: 'Homepage',
+  dashboard: 'Dashboard', products: 'Products', homepage: 'Homepage', shop: 'Shop Page',
   brand: 'Brand Settings', testimonials: 'Customer Reviews',
   orders: 'Orders', preview: 'Live Preview'
 };
@@ -445,6 +470,7 @@ function switchPanel(id, el) {
   document.getElementById('panel-title').textContent = panelTitles[id] || id;
   if (id === 'products') renderProductsTable();
   if (id === 'homepage') loadHomepageForm();
+  if (id === 'shop') loadShopPanel();
   if (id === 'brand') loadBrandForm();
   if (id === 'testimonials') renderTestimonials();
   if (id === 'orders') renderOrders();
@@ -589,6 +615,15 @@ function loadBrandForm() {
   document.getElementById('brand-email').value = d.brand.email || '';
 }
 
+function loadShopPanel() {
+  const d = DataManager.get();
+  document.getElementById('shop-hero-title-inp').value = d.sections.shopHeroTitle || '';
+  document.getElementById('shop-hero-sub-inp').value = d.sections.shopHeroSub || '';
+  const imgInp = document.getElementById('shop-hero-img-inp');
+  imgInp.value = d.sections.shopHeroImage || '';
+  previewImg('shop-hero-img-inp', 'shop-hero-img-prev');
+}
+
 function changePassword() {
   const np = document.getElementById('new-pass').value;
   const cp = document.getElementById('confirm-pass').value;
@@ -621,6 +656,12 @@ function autoSave() {
       d.sections.tryTitle = document.getElementById('try-title').value;
       d.sections.tryDesc = document.getElementById('try-desc').value;
       d.sections.press = document.getElementById('press-list').value.split(',').map(s => s.trim()).filter(Boolean);
+    }
+    const shopHeroTitleInp = document.getElementById('shop-hero-title-inp');
+    if (shopHeroTitleInp) {
+      d.sections.shopHeroTitle = shopHeroTitleInp.value;
+      d.sections.shopHeroSub = document.getElementById('shop-hero-sub-inp').value;
+      d.sections.shopHeroImage = document.getElementById('shop-hero-img-inp').value;
     }
     const brandName = document.getElementById('brand-name');
     if (brandName) {
@@ -770,9 +811,42 @@ function loadPreviewPage() {
 /* ===== UTILS ===== */
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function previewImg(inputId, previewId) {
-  const v = document.getElementById(inputId).value;
+  const v = document.getElementById(inputId).value.trim();
   const img = document.getElementById(previewId);
-  if (v) { img.src = v; img.style.display = 'block'; } else { img.style.display = 'none'; }
+  const statusId = previewId.replace('-prev', '-status');
+  const status = document.getElementById(statusId);
+
+  if (!v) {
+    img.style.display = 'none';
+    img.src = '';
+    if (status) { status.style.display = 'none'; status.textContent = ''; }
+    return;
+  }
+
+  // Show loading indicator
+  if (status) {
+    status.style.display = 'block';
+    status.style.color = 'var(--gray)';
+    status.textContent = '⏳ Loading image...';
+  }
+
+  img.onerror = function() {
+    this.style.display = 'none';
+    if (status) {
+      status.style.display = 'block';
+      status.style.color = '#c0392b';
+      status.textContent = '⚠ Cannot load image. Check the URL is a direct image link (not Google Drive / Dropbox preview).';
+    }
+  };
+  img.onload = function() {
+    this.style.display = 'block';
+    if (status) {
+      status.style.display = 'block';
+      status.style.color = '#1a6b3a';
+      status.textContent = '✓ Image loaded successfully (' + this.naturalWidth + '×' + this.naturalHeight + 'px)';
+    }
+  };
+  img.src = v;
 }
 function resetData() {
   if (!confirm('Reset ALL data to defaults? This cannot be undone.')) return;
