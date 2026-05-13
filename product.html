@@ -11,7 +11,7 @@
 <div class="announcement-bar"><span data-ann></span></div>
 
 <nav class="navbar">
-  <button id="hamburger" class="nav-icon-btn">
+  <button id="hamburger" class="nav-icon-btn" aria-label="Menu">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
   <a href="index.html" class="nav-brand" data-brand></a>
@@ -22,10 +22,10 @@
     <li><a href="shop.html?cat=all">Gifts</a></li>
   </ul>
   <div class="nav-icons">
-    <button class="nav-icon-btn">
+    <button class="nav-icon-btn" aria-label="Search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </button>
-    <button id="cart-icon" class="nav-icon-btn">
+    <button id="cart-icon" class="nav-icon-btn" aria-label="Cart">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
       <span id="cart-count"></span>
     </button>
@@ -44,6 +44,7 @@
       <li><a href="shop.html">Shop All</a></li>
       <li><a href="shop.html?cat=feminine">Feminine</a></li>
       <li><a href="shop.html?cat=masculine">Masculine</a></li>
+      <li><a href="shop.html?cat=all">Gifts</a></li>
     </ul>
   </div>
 </div>
@@ -58,22 +59,24 @@
   </div>
   <div id="cart-items"></div>
   <div class="cart-footer">
-    <div class="cart-total-row"><span>Total</span><span>IDR <span id="cart-total">0</span></span></div>
-    <button class="btn btn-dark btn-full">Checkout</button>
+    <div class="cart-total-row"><span>Subtotal</span><span>IDR <span id="cart-total">0</span></span></div>
+    <a href="checkout.html" class="btn btn-dark btn-full" style="display:flex">Checkout</a>
   </div>
 </div>
 
 <!-- BREADCRUMB -->
 <div style="padding:16px 24px;font-size:13px;color:var(--gray);border-bottom:1px solid var(--gray-light)">
   <div class="container">
-    <a href="index.html">Home</a> / <a href="shop.html">Shop</a> / <span id="breadcrumb-name"></span>
+    <a href="index.html" style="color:var(--sage)">Home</a> /
+    <a href="shop.html" style="color:var(--sage)">Shop</a> /
+    <span id="breadcrumb-name"></span>
   </div>
 </div>
 
-<!-- PRODUCT DETAIL -->
+<!-- PRODUCT DETAIL (rendered by JS) -->
 <div class="container">
   <div class="product-detail-grid" id="product-detail">
-    <div style="text-align:center;padding:80px;color:var(--gray)">Loading...</div>
+    <div style="text-align:center;padding:80px;color:var(--gray);grid-column:1/-1">Loading...</div>
   </div>
 </div>
 
@@ -97,7 +100,7 @@
         </div>
         <div class="vibe-card">
           <div class="vibe-label">How to Use</div>
-          <div class="vibe-text">Spray on pulse points, lightly pat wrists. For instant freshness, place on neck and under ears.</div>
+          <div class="vibe-text">Spray on pulse points, lightly pat wrists. For instant freshness, apply on neck and under ears. Layer with other aura. scents for a signature blend.</div>
         </div>
       </div>
     </div>
@@ -112,13 +115,31 @@
   </div>
 </section>
 
-<!-- TRUST -->
+<!-- TRUST BAR -->
 <div class="trust-bar">
   <div class="container">
     <div class="trust-grid">
-      <div class="trust-item"><div class="trust-icon">🔒</div><strong>Secure Payments</strong><span>Verified & encrypted</span></div>
-      <div class="trust-item"><div class="trust-icon">🚚</div><strong>Free Shipping</strong><span>Above IDR 700.000</span></div>
-      <div class="trust-item"><div class="trust-icon">↩️</div><strong>Free Returns</strong><span>Within 30 days</span></div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <strong>Secure Payments</strong>
+        <span>Verified &amp; encrypted</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 4v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <strong>Free Shipping</strong>
+        <span>Above IDR 700.000</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        </div>
+        <strong>Free Returns</strong>
+        <span>Within 30 days</span>
+      </div>
     </div>
   </div>
 </div>
@@ -131,11 +152,11 @@
         <p id="footer-about"></p>
       </div>
       <div class="footer-col">
-        <h4>Help & FAQs</h4>
+        <h4>Help &amp; FAQs</h4>
         <ul>
           <li><a href="#">Contact Us</a></li>
           <li><a href="#">FAQ</a></li>
-          <li><a href="#">Return & Exchange</a></li>
+          <li><a href="#">Return &amp; Exchange</a></li>
           <li><a href="#">Terms</a></li>
         </ul>
       </div>
@@ -148,13 +169,49 @@
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">&copy; <span data-brand></span> Perfumery</div>
+    <div class="footer-bottom">&copy; <span data-brand></span> Perfumery. All rights reserved.</div>
   </div>
 </footer>
 
 <script src="main.js"></script>
 <script>
-const NOTE_EMOJI = {"Peony":"🌸","Rose Otto":"🌹","Lychee":"🍈","Pink Pepper":"🌶","White Musk":"✨","Patchouli":"🌿","Iris":"💜","Violet":"🫐","Sandalwood":"🪵","Ambergris":"🌊","Bergamot":"🍊","Cashmere":"🧶","Vetiver":"🌾","Oakmoss":"🌲","Leather":"🟤","Tobacco":"🍂","Amber":"🟡","Cedar":"🌲","Oud":"🪵","Cardamom":"🌿","Saffron":"🌼","Vanilla":"🌾","Incense":"🕯","Musk":"✨","All 7 scents included":"🎁"};
+const NOTE_EMOJI = {
+  "Peony":"🌸","Rose Otto":"🌹","Lychee":"🍈","Pink Pepper":"🌶","White Musk":"✨",
+  "Patchouli":"🌿","Iris":"💜","Violet":"🫐","Sandalwood":"🪵","Ambergris":"🌊",
+  "Bergamot":"🍊","Cashmere":"🧶","Vetiver":"🌾","Oakmoss":"🌲","Leather":"🟤",
+  "Tobacco":"🍂","Amber":"🟡","Cedar":"🌲","Oud":"🪵","Cardamom":"🌿",
+  "Saffron":"🌼","Vanilla":"🌾","Incense":"🕯","Musk":"✨","All 7 scents included":"🎁"
+};
+
+// ===== BUG FIX: qty is kept in module-level var, exposed via named functions =====
+let _prodQty = 1;
+let _currentProdId = null;
+let _currentProdStock = false;
+
+function setQty(n) {
+  _prodQty = Math.max(1, Math.min(99, n));
+  const el = document.getElementById('qty-val');
+  if (el) el.textContent = _prodQty;
+}
+
+function decreaseQty() { setQty(_prodQty - 1); }
+function increaseQty() { setQty(_prodQty + 1); }
+
+function addToCartFromDetail() {
+  if (!_currentProdStock) { showToast('This item is sold out', 'error'); return; }
+  Cart.add(_currentProdId, _prodQty);
+  showToast(`Added ${_prodQty > 1 ? _prodQty + '× ' : ''}to cart`);
+  renderCartPanel();
+  document.getElementById('cart-sidebar')?.classList.add('open');
+  document.getElementById('cart-overlay')?.classList.add('open');
+}
+
+function buyNow() {
+  if (!_currentProdStock) { showToast('This item is sold out', 'error'); return; }
+  Cart.add(_currentProdId, _prodQty);
+  renderCartPanel();
+  window.location.href = 'checkout.html';
+}
 
 (function(){
   const d = DataManager.get();
@@ -163,70 +220,125 @@ const NOTE_EMOJI = {"Peony":"🌸","Rose Otto":"🌹","Lychee":"🍈","Pink Pepp
   const id = parseInt(new URLSearchParams(location.search).get('id'));
   const p = d.products.find(pr => pr.id === id);
 
-  if(!p){ document.getElementById('product-detail').innerHTML = '<div style="padding:80px;text-align:center"><h2>Product not found</h2><a href="shop.html" class="btn btn-dark" style="margin-top:20px;display:inline-block">Back to Shop</a></div>'; return; }
+  if (!p) {
+    document.getElementById('product-detail').innerHTML = `
+      <div style="padding:80px;text-align:center;grid-column:1/-1">
+        <h2 style="margin-bottom:12px">Product not found</h2>
+        <p style="color:var(--gray);margin-bottom:28px">This product may have been removed or the URL is incorrect.</p>
+        <a href="shop.html" class="btn btn-dark">Back to Shop</a>
+      </div>`;
+    return;
+  }
 
   document.title = `${p.name} — aura.`;
   document.getElementById('breadcrumb-name').textContent = p.name;
 
-  let qty = 1;
+  _currentProdId = p.id;
+  _currentProdStock = p.stock;
+
+  const badgeHtml = p.badge ? `
+    <div style="display:inline-block;padding:5px 14px;border-radius:100px;font-size:11px;font-weight:700;margin-bottom:16px;letter-spacing:0.06em;text-transform:uppercase;
+      background:${p.badge==='Sold out'?'#fde8e8;color:#c0392b':p.badge==='NEW'?'#d4f0e8;color:#1a6b3a':'#fef3dc;color:#a66c00'}">
+      ${p.badge}
+    </div>` : '';
+
+  const savingsHtml = p.originalPrice
+    ? `<span style="display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;background:#fef3dc;color:#a66c00;margin-left:10px">
+        Save IDR ${fmt(p.originalPrice - p.price)}
+       </span>` : '';
 
   document.getElementById('product-detail').innerHTML = `
     <div class="product-detail-gallery">
-      <div class="main-image"><img src="${p.image}" alt="${p.name}" id="main-img"></div>
+      <div class="main-image">
+        <img src="${p.image}" alt="${p.name}" id="main-img">
+      </div>
       <div class="thumb-row">
-        <div class="thumb active" onclick="document.getElementById('main-img').src='${p.image}';this.parentNode.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));this.classList.add('active')">
+        <div class="thumb active" onclick="switchThumb(this,'${p.image}')">
           <img src="${p.image}" alt="">
         </div>
       </div>
     </div>
+
     <div class="product-detail-info">
-      <p style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);margin-bottom:8px">${p.category === 'all' ? 'Gift Set' : p.category.charAt(0).toUpperCase() + p.category.slice(1)}</p>
-      <h1>${p.name}</h1>
+      <p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);margin-bottom:10px">
+        ${p.category === 'all' ? 'Gift Set' : p.category.charAt(0).toUpperCase() + p.category.slice(1)} · aura. Perfumery
+      </p>
+      <h1 style="margin-bottom:10px">${p.name}</h1>
+      ${badgeHtml}
+
       <div class="detail-price">
         IDR ${fmt(p.price)}
-        ${p.originalPrice ? `<span class="original">IDR ${fmt(p.originalPrice)}</span>` : ''}
+        ${p.originalPrice ? `<span class="original">IDR ${fmt(p.originalPrice)}</span>${savingsHtml}` : ''}
       </div>
+
       <p class="detail-desc">${p.description}</p>
-      ${p.badge ? `<div style="display:inline-block;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;margin-bottom:20px;background:${p.badge==='Sold out'?'#fde8e8;color:#c0392b':p.badge==='NEW'?'#d4f0e8;color:#1a6b3a':'#fef3dc;color:#a66c00'}">${p.badge}</div>` : ''}
+
       <div class="qty-control">
-        <button class="qty-btn" onclick="if(qty>1){qty--;document.getElementById('qty-val').textContent=qty}">−</button>
+        <button class="qty-btn" onclick="decreaseQty()" aria-label="Decrease quantity">−</button>
         <div class="qty-display" id="qty-val">1</div>
-        <button class="qty-btn" onclick="qty++;document.getElementById('qty-val').textContent=qty">+</button>
+        <button class="qty-btn" onclick="increaseQty()" aria-label="Increase quantity">+</button>
       </div>
+
       <div class="detail-actions">
-        <button class="btn btn-outline btn-full" onclick="if(${p.stock}){for(let i=0;i<qty;i++)Cart.add(${p.id},1);showToast('Added to cart!');renderCartPanel();document.getElementById('cart-sidebar').classList.add('open');document.getElementById('cart-overlay').classList.add('open');}else{showToast('Sold out.','error')}">${p.stock ? 'Add to Cart' : 'Sold Out'}</button>
-        <button class="btn btn-dark btn-full">${p.stock ? 'Buy It Now' : 'Notify Me'}</button>
+        <button class="btn btn-outline btn-full" onclick="addToCartFromDetail()" ${!p.stock ? 'disabled style="opacity:0.5;cursor:not-allowed"' : ''}>
+          ${p.stock ? 'Add to Cart' : 'Sold Out'}
+        </button>
+        <button class="btn btn-dark btn-full" onclick="${p.stock ? 'buyNow()' : 'showToast(\'Notify me feature coming soon\')'}">
+          ${p.stock ? 'Buy Now' : 'Notify Me When Available'}
+        </button>
       </div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--gray)">
-        <span>🚚 Free shipping above IDR 700.000</span>
-        <span>↩️ Free returns within 30 days</span>
-        <span>🔒 Secure payment</span>
+
+      <div class="detail-shipping-info">
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 4v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Free shipping on orders above IDR 700.000
+        </span>
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          Free returns within 30 days
+        </span>
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Secure encrypted payment
+        </span>
       </div>
     </div>`;
 
-  // Notes
+  // About section
   document.getElementById('about-section').style.display = 'block';
   document.getElementById('vibe-text').textContent = p.vibe;
   document.getElementById('tune-text').textContent = p.tune;
   document.getElementById('notes-grid').innerHTML = p.notes.map(n =>
-    `<div class="note-item"><div class="note-circle">${NOTE_EMOJI[n]||'🌸'}</div><span>${n}</span></div>`
+    `<div class="note-item">
+      <div class="note-circle">${NOTE_EMOJI[n] || '🌸'}</div>
+      <span>${n}</span>
+    </div>`
   ).join('');
 
-  // Related
-  const related = d.products.filter(pr => pr.id !== p.id).slice(0,4);
+  // Related products
+  const related = d.products.filter(pr => pr.id !== p.id).slice(0, 4);
   document.getElementById('related-products').innerHTML = related.map(pr => `
     <div class="product-card" onclick="location.href='product.html?id=${pr.id}'">
       <div class="product-img-wrap">
         <img src="${pr.image}" alt="${pr.name}" loading="lazy">
         ${pr.badge ? `<span class="product-badge ${pr.badge==='Sold out'?'badge-sold':pr.badge==='NEW'?'badge-new':'badge-best'}">${pr.badge}</span>` : ''}
         <div class="product-overlay">
-          <button class="btn" style="background:rgba(255,255,255,0.9);color:#000;border:none;width:100%;font-size:12px" onclick="event.stopPropagation();addToCart(${pr.id})">${pr.stock?'Add to Cart':'Sold Out'}</button>
+          <button class="btn" style="background:rgba(255,255,255,0.92);color:#000;border:none;width:100%;font-size:12px"
+            onclick="event.stopPropagation();addToCart(${pr.id})">
+            ${pr.stock ? 'Add to Cart' : 'Sold Out'}
+          </button>
         </div>
       </div>
       <div class="product-name">${pr.name}</div>
       <div class="product-price">IDR ${fmt(pr.price)}</div>
     </div>`).join('');
 })();
+
+function switchThumb(el, src) {
+  document.getElementById('main-img').src = src;
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
 </script>
 </body>
 </html>
