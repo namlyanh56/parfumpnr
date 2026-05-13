@@ -40,15 +40,46 @@ const DEFAULT_DATA = {
 };
 
 /* ===== DATA MANAGER ===== */
+// Paste Firebase config kamu di sini
+const firebaseConfig = {
+  apiKey: "PASTE_DARI_FIREBASE_CONSOLE",
+  authDomain: "xxx.firebaseapp.com",
+  projectId: "xxx",
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const DOC = db.collection('aura').doc('sitedata');
+
 const DataManager = {
-  get() {
+  // get() sekarang ASYNC — returns Promise
+  async get() {
     try {
-      const s = localStorage.getItem('aura_data');
-      return s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT_DATA));
-    } catch { return JSON.parse(JSON.stringify(DEFAULT_DATA)); }
+      const snap = await DOC.get();
+      if (snap.exists) return snap.data();
+      // Pertama kali: belum ada data di Firestore, pakai default
+      await DOC.set(JSON.parse(JSON.stringify(DEFAULT_DATA)));
+      return JSON.parse(JSON.stringify(DEFAULT_DATA));
+    } catch {
+      // Fallback ke localStorage kalau offline
+      try {
+        const s = localStorage.getItem('aura_data');
+        return s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT_DATA));
+      } catch { return JSON.parse(JSON.stringify(DEFAULT_DATA)); }
+    }
   },
-  save(d) { localStorage.setItem('aura_data', JSON.stringify(d)); },
-  reset() { localStorage.removeItem('aura_data'); return JSON.parse(JSON.stringify(DEFAULT_DATA)); }
+
+  async save(d) {
+    await DOC.set(d);
+    // Cache lokal sebagai backup offline
+    localStorage.setItem('aura_data', JSON.stringify(d));
+  },
+
+  async reset() {
+    const def = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    await DOC.set(def);
+    localStorage.removeItem('aura_data');
+    return def;
+  }
 };
 
 /* ===== CART ===== */
