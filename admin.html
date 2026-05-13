@@ -6,38 +6,69 @@
 <title>Admin — aura.</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  body { background: #f0ede8; }
-  .modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:none;align-items:center;justify-content:center; }
-  .modal-overlay.open { display:flex; }
-  .modal { background:var(--white);border-radius:8px;padding:32px;width:min(600px,95vw);max-height:90vh;overflow-y:auto;position:relative; }
-  .modal-title { font-size:1.1rem;font-weight:700;margin-bottom:24px; }
-  .modal-close { position:absolute;top:16px;right:16px;font-size:20px;color:var(--gray);cursor:pointer; }
-  .color-swatch { width:24px;height:24px;border-radius:50%;display:inline-block;border:2px solid transparent;cursor:pointer;margin-right:6px; }
-  .color-swatch.active { border-color:var(--black); }
-  .img-preview { width:100%;height:180px;object-fit:cover;border-radius:var(--radius);margin-top:8px;display:none; }
-  .switch { position:relative;display:inline-block;width:48px;height:26px; }
-  .switch input { opacity:0;width:0;height:0; }
-  .slider { position:absolute;cursor:pointer;inset:0;background:#ccc;border-radius:26px;transition:.3s; }
-  .slider:before { content:'';position:absolute;width:20px;height:20px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.3s; }
-  input:checked + .slider { background:var(--sage); }
-  input:checked + .slider:before { transform:translateX(22px); }
-  .admin-login { min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--black); }
-  .login-card { background:var(--white);padding:48px;border-radius:12px;width:340px;text-align:center; }
-  .login-card h2 { font-size:1.8rem;margin-bottom:8px; }
-  .login-card p { color:var(--gray);margin-bottom:32px; }
+body { background: #f0ede8; }
+
+/* Login */
+.admin-login { min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--black); }
+.login-card { background:var(--white); padding:48px; border-radius:14px; width:360px; text-align:center; box-shadow:0 24px 80px rgba(0,0,0,0.4); }
+.login-card .login-brand { font-family:var(--font-serif); font-size:2rem; margin-bottom:4px; }
+.login-card p { color:var(--gray); margin-bottom:28px; font-size:14px; }
+.login-card .form-group { text-align:left; }
+.login-card .form-group input { margin-bottom:0; }
+.login-error { color:#c0392b; font-size:13px; margin-top:8px; display:none; }
+
+/* Sidebar SVG icons */
+.admin-nav li a .nav-icon { width:16px; height:16px; flex-shrink:0; opacity:0.7; }
+.admin-nav li a:hover .nav-icon, .admin-nav li a.active .nav-icon { opacity:1; }
+
+/* Preview */
+.preview-panel { background:var(--white); border-radius:8px; padding:0; overflow:hidden; }
+.preview-toolbar { display:flex; align-items:center; gap:8px; padding:14px 20px; border-bottom:1px solid var(--gray-light); background:var(--white); }
+.preview-toolbar .label { font-size:12px; font-weight:600; color:var(--gray); letter-spacing:0.05em; text-transform:uppercase; margin-right:8px; }
+.preview-device-btn { display:flex; align-items:center; justify-content:center; gap:5px; padding:6px 12px; border:1px solid var(--gray-light); border-radius:4px; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s; background:white; color:var(--gray); }
+.preview-device-btn svg { width:13px; height:13px; }
+.preview-device-btn.active { background:var(--black); color:white; border-color:var(--black); }
+.preview-frame-outer { padding:20px; background:#e8e4de; min-height:500px; display:flex; justify-content:center; align-items:flex-start; overflow:auto; }
+.preview-frame-wrap { background:white; box-shadow:0 8px 40px rgba(0,0,0,0.15); transition:width 0.3s ease; border-radius:4px; overflow:hidden; }
+#preview-frame { border:none; display:block; height:600px; }
+
+/* Orders */
+.order-card { background:var(--white); border-radius:8px; padding:20px; margin-bottom:12px; }
+.order-card-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
+.order-num { font-weight:700; font-size:14px; }
+.order-date { font-size:12px; color:var(--gray); }
+.order-status { display:inline-block; padding:3px 10px; border-radius:100px; font-size:11px; font-weight:700; background:#d4f4e2; color:#1a6b3a; }
+.order-items-preview { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+.order-thumb { width:48px; height:48px; object-fit:cover; border-radius:4px; border:1px solid var(--gray-light); }
+.order-meta { display:flex; justify-content:space-between; font-size:13px; color:var(--gray); }
+.order-total { font-weight:700; color:var(--black); }
+
+/* Dashboard quick actions */
+.quick-actions { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:24px; }
+.quick-action { background:var(--white); padding:16px; border-radius:8px; text-align:center; cursor:pointer; transition:all 0.2s; border:1px solid transparent; }
+.quick-action:hover { border-color:var(--sage); }
+.quick-action svg { width:24px; height:24px; stroke:var(--sage); margin:0 auto 8px; }
+.quick-action span { display:block; font-size:12px; font-weight:600; }
+
+/* Color vars preview */
+.color-row { display:flex; gap:12px; align-items:center; margin-bottom:12px; }
+.color-swatch-box { width:36px; height:36px; border-radius:6px; border:1px solid var(--gray-light); cursor:pointer; }
+.color-label { font-size:13px; font-weight:600; flex:1; }
+.color-value { font-size:12px; color:var(--gray); font-family:monospace; }
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div class="admin-login" id="login-screen">
   <div class="login-card">
-    <h2 style="font-family:var(--font-serif)">aura.</h2>
+    <div class="login-brand">aura.</div>
     <p>Admin Dashboard</p>
-    <div class="form-group"><label>Username</label><input type="text" id="login-user" value="admin"></div>
-    <div class="form-group"><label>Password</label><input type="password" id="login-pass" placeholder="Enter password"></div>
-    <button class="btn btn-dark btn-full" onclick="doLogin()">Sign In</button>
-    <p style="font-size:12px;color:var(--gray);margin-top:16px">Default password: <strong>aura2025</strong></p>
+    <div class="form-group"><label>Username</label><input type="text" id="login-user" value="admin" autocomplete="username"></div>
+    <div class="form-group" style="margin-top:12px"><label>Password</label><input type="password" id="login-pass" placeholder="Enter password" autocomplete="current-password"></div>
+    <p class="login-error" id="login-error">Incorrect username or password.</p>
+    <button class="btn btn-dark btn-full" style="margin-top:20px" onclick="doLogin()">Sign In</button>
+    <p style="font-size:12px;color:var(--gray);margin-top:16px">Default: <code>admin</code> / <code>aura2025</code></p>
   </div>
 </div>
 
@@ -46,17 +77,50 @@
 
   <!-- SIDEBAR -->
   <aside class="admin-sidebar">
-    <div class="admin-logo">aura. <span>admin</span></div>
+    <div class="admin-logo">
+      aura. <span>admin</span>
+    </div>
     <ul class="admin-nav">
-      <li><a href="#" class="active" data-panel="dashboard" onclick="switchPanel('dashboard',this)"><span class="icon">📊</span> Dashboard</a></li>
-      <li><a href="#" data-panel="products" onclick="switchPanel('products',this)"><span class="icon">🧴</span> Products</a></li>
-      <li><a href="#" data-panel="homepage" onclick="switchPanel('homepage',this)"><span class="icon">🏠</span> Homepage</a></li>
-      <li><a href="#" data-panel="brand" onclick="switchPanel('brand',this)"><span class="icon">✏️</span> Brand</a></li>
-      <li><a href="#" data-panel="testimonials" onclick="switchPanel('testimonials',this)"><span class="icon">💬</span> Testimonials</a></li>
-      <li style="margin-top:auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px">
-        <a href="index.html" target="_blank"><span class="icon">🌐</span> View Site</a>
+      <li><a href="#" class="active" onclick="switchPanel('dashboard',this);return false">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a></li>
+      <li><a href="#" onclick="switchPanel('products',this);return false">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        Products
+      </a></li>
+      <li><a href="#" onclick="switchPanel('homepage',this);return false">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Homepage
+      </a></li>
+      <li><a href="#" onclick="switchPanel('brand',this);return false">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+        Brand
+      </a></li>
+      <li><a href="#" onclick="switchPanel('testimonials',this);return false">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Testimonials
+      </a></li>
+      <li><a href="#" onclick="switchPanel('orders',this);return false">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Orders
+      </a></li>
+      <li><a href="#" onclick="switchPanel('preview',this);return false">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Live Preview
+      </a></li>
+      <li style="margin-top:auto;border-top:1px solid rgba(255,255,255,0.08);padding-top:12px">
+        <a href="index.html" target="_blank">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          View Site
+        </a>
       </li>
-      <li><a href="#" onclick="doLogout()"><span class="icon">🚪</span> Logout</a></li>
+      <li>
+        <a href="#" onclick="doLogout();return false">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </a>
+      </li>
     </ul>
   </aside>
 
@@ -65,8 +129,11 @@
     <div class="admin-topbar">
       <h2 id="panel-title">Dashboard</h2>
       <div class="admin-topbar-actions">
-        <button class="btn btn-outline" style="padding:8px 16px;font-size:12px" onclick="resetData()">Reset to Default</button>
-        <button class="btn btn-sage" style="padding:8px 16px;font-size:12px" onclick="showToastAdmin('Changes auto-saved!')">✓ Saved</button>
+        <button class="btn btn-outline" style="padding:8px 14px;font-size:12px" onclick="resetData()">Reset to Default</button>
+        <button class="btn btn-sage" style="padding:8px 14px;font-size:12px" id="saved-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          All Changes Saved
+        </button>
       </div>
     </div>
 
@@ -75,26 +142,70 @@
       <!-- DASHBOARD -->
       <div id="panel-dashboard" class="admin-panel active">
         <div class="stats-grid">
-          <div class="stat-card"><span class="stat-icon">🧴</span><div class="stat-value" id="stat-products">0</div><div class="stat-label">Total Products</div></div>
-          <div class="stat-card"><span class="stat-icon">✅</span><div class="stat-value" id="stat-instock">0</div><div class="stat-label">In Stock</div></div>
-          <div class="stat-card"><span class="stat-icon">💬</span><div class="stat-value" id="stat-reviews">0</div><div class="stat-label">Reviews</div></div>
-          <div class="stat-card"><span class="stat-icon">🌿</span><div class="stat-value">100%</div><div class="stat-label">Natural Ingredients</div></div>
+          <div class="stat-card">
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div>
+            <div class="stat-value" id="stat-products">0</div>
+            <div class="stat-label">Total Products</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="stat-value" id="stat-instock">0</div>
+            <div class="stat-label">In Stock</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+            <div class="stat-value" id="stat-reviews">0</div>
+            <div class="stat-label">Reviews</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+            <div class="stat-value" id="stat-orders">0</div>
+            <div class="stat-label">Orders</div>
+          </div>
         </div>
-        <div class="card">
-          <div class="card-title">Quick Preview</div>
-          <div style="display:flex;gap:12px;flex-wrap:wrap" id="dash-products"></div>
+
+        <div class="quick-actions">
+          <div class="quick-action" onclick="switchPanel('products',document.querySelector('[data-panel=products]'))">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <span>Add Product</span>
+          </div>
+          <div class="quick-action" onclick="switchPanel('homepage',document.querySelector('[data-panel=homepage]'))">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <span>Edit Homepage</span>
+          </div>
+          <div class="quick-action" onclick="switchPanel('preview',document.querySelector('[data-panel=preview]'))">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span>Live Preview</span>
+          </div>
         </div>
+
         <div class="card">
-          <div class="card-title">Recent Activity</div>
-          <p style="color:var(--gray);font-size:14px">All changes are saved automatically to local storage. <a href="index.html" target="_blank" style="color:var(--sage)">View your live site →</a></p>
+          <div class="card-title">Product Overview</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap" id="dash-products"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">WordPress-style Editing</div>
+          <p style="font-size:14px;color:var(--gray);line-height:1.7;margin-bottom:16px">
+            You can edit text directly on the live site! Go to your site, and look for the <strong>admin bar at the top</strong>.
+            Toggle <strong>"Edit Mode"</strong> — then click any highlighted text to edit it in place, just like WordPress.
+          </p>
+          <div style="display:flex;gap:12px">
+            <a href="index.html" target="_blank" class="btn btn-sage" style="padding:10px 18px;font-size:12px">
+              Open Site with Edit Mode →
+            </a>
+          </div>
         </div>
       </div>
 
       <!-- PRODUCTS -->
       <div id="panel-products" class="admin-panel">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-          <h3>Manage Products</h3>
-          <button class="btn btn-sage" style="padding:10px 20px;font-size:13px" onclick="openProductModal()">+ Add Product</button>
+          <h3 style="font-size:1rem;font-family:var(--font-sans)">Manage Products</h3>
+          <button class="btn btn-sage" style="padding:10px 18px;font-size:12px" onclick="openProductModal()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Product
+          </button>
         </div>
         <div class="card" style="padding:0;overflow:hidden">
           <table class="products-table">
@@ -111,7 +222,11 @@
           <div class="form-group"><label>Hero Title</label><input type="text" id="hero-title" oninput="autoSave()"></div>
           <div class="form-group"><label>Hero Subtitle</label><input type="text" id="hero-subtitle" oninput="autoSave()"></div>
           <div class="form-group"><label>CTA Button Text</label><input type="text" id="hero-cta" oninput="autoSave()"></div>
-          <div class="form-group"><label>Hero Image URL</label><input type="url" id="hero-image" oninput="previewImg('hero-image','hero-img-prev'); autoSave()"><img id="hero-img-prev" class="img-preview"></div>
+          <div class="form-group">
+            <label>Hero Image URL</label>
+            <input type="url" id="hero-image" oninput="previewImg('hero-image','hero-img-prev');autoSave()" placeholder="https://...">
+            <img id="hero-img-prev" class="img-preview">
+          </div>
         </div>
         <div class="card">
           <div class="card-title">Featured Section</div>
@@ -124,7 +239,8 @@
           <div class="form-group"><label>Description</label><textarea id="try-desc" oninput="autoSave()"></textarea></div>
         </div>
         <div class="card">
-          <div class="card-title">Press / Media Mentions (comma-separated)</div>
+          <div class="card-title">Press / Media Mentions</div>
+          <p style="font-size:13px;color:var(--gray);margin-bottom:12px">Separate with commas. Example: VOGUE, ELLE, COSMOPOLITAN</p>
           <div class="form-group"><input type="text" id="press-list" oninput="autoSave()"></div>
         </div>
       </div>
@@ -132,21 +248,79 @@
       <!-- BRAND -->
       <div id="panel-brand" class="admin-panel">
         <div class="card">
-          <div class="card-title">Brand Settings</div>
+          <div class="card-title">Brand Identity</div>
           <div class="form-group"><label>Brand Name</label><input type="text" id="brand-name" oninput="autoSave()"></div>
           <div class="form-group"><label>Announcement Bar Text</label><input type="text" id="brand-ann" oninput="autoSave()"></div>
-          <div class="form-group"><label>About Text (shown in footer)</label><textarea id="brand-about" oninput="autoSave()"></textarea></div>
-          <div class="form-group"><label>Email</label><input type="email" id="brand-email" oninput="autoSave()"></div>
+          <div class="form-group"><label>About Text (footer)</label><textarea id="brand-about" oninput="autoSave()"></textarea></div>
+          <div class="form-group"><label>Contact Email</label><input type="email" id="brand-email" oninput="autoSave()"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Change Admin Password</div>
+          <div class="form-row">
+            <div class="form-group"><label>New Password</label><input type="password" id="new-pass" placeholder="Enter new password"></div>
+            <div class="form-group"><label>Confirm Password</label><input type="password" id="confirm-pass" placeholder="Confirm new password"></div>
+          </div>
+          <button class="btn btn-sage" style="padding:10px 18px;font-size:12px" onclick="changePassword()">Update Password</button>
         </div>
       </div>
 
       <!-- TESTIMONIALS -->
       <div id="panel-testimonials" class="admin-panel">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-          <h3>Testimonials</h3>
-          <button class="btn btn-sage" style="padding:10px 20px;font-size:13px" onclick="openTestimonialModal()">+ Add Review</button>
+          <h3 style="font-size:1rem;font-family:var(--font-sans)">Customer Reviews</h3>
+          <button class="btn btn-sage" style="padding:10px 18px;font-size:12px" onclick="openTestimonialModal()">+ Add Review</button>
         </div>
         <div id="testimonials-list"></div>
+      </div>
+
+      <!-- ORDERS -->
+      <div id="panel-orders" class="admin-panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <h3 style="font-size:1rem;font-family:var(--font-sans)">Orders</h3>
+          <button class="btn btn-outline" style="padding:8px 14px;font-size:12px;color:#c0392b;border-color:#c0392b" onclick="clearOrders()">Clear All Orders</button>
+        </div>
+        <div id="orders-list"></div>
+      </div>
+
+      <!-- LIVE PREVIEW -->
+      <div id="panel-preview" class="admin-panel">
+        <div class="preview-panel">
+          <div class="preview-toolbar">
+            <span class="label">Preview</span>
+            <button class="preview-device-btn active" data-w="100%" onclick="setPreviewDevice(this,'100%')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Desktop
+            </button>
+            <button class="preview-device-btn" data-w="768px" onclick="setPreviewDevice(this,'768px')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              Tablet
+            </button>
+            <button class="preview-device-btn" data-w="390px" onclick="setPreviewDevice(this,'390px')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              Mobile
+            </button>
+            <div style="margin-left:auto;display:flex;gap:8px">
+              <select id="preview-page-select" onchange="loadPreviewPage()" style="padding:6px 10px;border:1px solid var(--gray-light);border-radius:4px;font:inherit;font-size:12px;cursor:pointer">
+                <option value="index.html">Homepage</option>
+                <option value="shop.html">Shop</option>
+                <option value="product.html?id=1">Product Detail</option>
+                <option value="checkout.html">Checkout</option>
+              </select>
+              <a id="preview-open-link" href="index.html" target="_blank" class="btn btn-outline" style="padding:7px 12px;font-size:12px">Open ↗</a>
+            </div>
+          </div>
+          <div class="preview-frame-outer" id="preview-frame-outer">
+            <div class="preview-frame-wrap" id="preview-frame-wrap" style="width:100%">
+              <iframe id="preview-frame" src="index.html" title="Site Preview" style="width:100%"></iframe>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:20px">
+          <div class="card-title">Inline Edit Mode</div>
+          <p style="font-size:14px;color:var(--gray);line-height:1.7">
+            The preview above shows your live site. To edit text directly on the page, open the site in a new tab using the <strong>Open ↗</strong> button, then toggle <strong>Edit Mode</strong> in the admin bar at the top of the page.
+          </p>
+        </div>
       </div>
 
     </div><!-- /admin-content -->
@@ -160,31 +334,47 @@
     <div class="modal-title" id="product-modal-title">Add Product</div>
     <input type="hidden" id="edit-id">
     <div class="form-row">
-      <div class="form-group"><label>Product Name</label><input type="text" id="p-name"></div>
-      <div class="form-group"><label>Price (IDR)</label><input type="number" id="p-price"></div>
+      <div class="form-group"><label>Product Name *</label><input type="text" id="p-name" placeholder="e.g. Midnight Rose"></div>
+      <div class="form-group"><label>Price (IDR) *</label><input type="number" id="p-price" placeholder="401000"></div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>Original Price (0 = none)</label><input type="number" id="p-orig"></div>
+      <div class="form-group"><label>Original Price (0 = no discount)</label><input type="number" id="p-orig" value="0"></div>
       <div class="form-group"><label>Category</label>
-        <select id="p-cat"><option value="feminine">Feminine</option><option value="masculine">Masculine</option><option value="all">All / Gift</option></select>
+        <select id="p-cat">
+          <option value="feminine">Feminine</option>
+          <option value="masculine">Masculine</option>
+          <option value="all">Gift / All</option>
+        </select>
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>Badge (leave empty for none)</label>
-        <select id="p-badge"><option value="">No Badge</option><option value="NEW">NEW</option><option value="Sold out">Sold out</option><option value="BEST VALUE">BEST VALUE</option></select>
+      <div class="form-group"><label>Badge</label>
+        <select id="p-badge">
+          <option value="">No Badge</option>
+          <option value="NEW">NEW</option>
+          <option value="Sold out">Sold out</option>
+          <option value="BEST VALUE">BEST VALUE</option>
+        </select>
       </div>
-      <div class="form-group"><label>In Stock</label><br><label class="switch" style="margin-top:8px"><input type="checkbox" id="p-stock" checked><span class="slider"></span></label></div>
+      <div class="form-group">
+        <label>In Stock</label><br>
+        <label class="switch" style="margin-top:8px"><input type="checkbox" id="p-stock" checked><span class="slider"></span></label>
+      </div>
     </div>
-    <div class="form-group"><label>Image URL</label><input type="url" id="p-img" oninput="previewImg('p-img','p-img-prev')"><img id="p-img-prev" class="img-preview"></div>
-    <div class="form-group"><label>Description</label><textarea id="p-desc"></textarea></div>
-    <div class="form-group"><label>Fragrance Notes (comma-separated)</label><input type="text" id="p-notes" placeholder="e.g. Rose, Musk, Amber"></div>
+    <div class="form-group">
+      <label>Image URL</label>
+      <input type="url" id="p-img" oninput="previewImg('p-img','p-img-prev')" placeholder="https://images.unsplash.com/...">
+      <img id="p-img-prev" class="img-preview">
+    </div>
+    <div class="form-group"><label>Description</label><textarea id="p-desc" placeholder="Describe the scent, mood, occasion..."></textarea></div>
+    <div class="form-group"><label>Fragrance Notes (comma-separated)</label><input type="text" id="p-notes" placeholder="e.g. Rose, Musk, Amber, Sandalwood"></div>
     <div class="form-row">
-      <div class="form-group"><label>The Vibe</label><input type="text" id="p-vibe"></div>
-      <div class="form-group"><label>The Tune</label><input type="text" id="p-tune"></div>
+      <div class="form-group"><label>The Vibe</label><input type="text" id="p-vibe" placeholder="e.g. Golden hour, forever."></div>
+      <div class="form-group"><label>The Tune</label><input type="text" id="p-tune" placeholder="e.g. Song Name - Artist"></div>
     </div>
-    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px">
-      <button class="btn btn-outline" onclick="closeModal('product-modal')">Cancel</button>
-      <button class="btn btn-sage" onclick="saveProduct()">Save Product</button>
+    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--gray-light)">
+      <button class="btn btn-outline" onclick="closeModal('product-modal')" style="padding:10px 20px">Cancel</button>
+      <button class="btn btn-sage" onclick="saveProduct()" style="padding:10px 20px">Save Product</button>
     </div>
   </div>
 </div>
@@ -193,80 +383,107 @@
 <div class="modal-overlay" id="testimonial-modal">
   <div class="modal">
     <span class="modal-close" onclick="closeModal('testimonial-modal')">&times;</span>
-    <div class="modal-title">Add Testimonial</div>
+    <div class="modal-title" id="t-modal-title">Add Review</div>
     <input type="hidden" id="t-edit-idx">
-    <div class="form-group"><label>Customer Name</label><input type="text" id="t-name"></div>
-    <div class="form-group"><label>Rating (1-5)</label><input type="number" id="t-rating" min="1" max="5" value="5"></div>
-    <div class="form-group"><label>Review Text</label><textarea id="t-text"></textarea></div>
-    <div class="form-group"><label>Date</label><input type="text" id="t-date" placeholder="e.g. April 2025"></div>
-    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px">
-      <button class="btn btn-outline" onclick="closeModal('testimonial-modal')">Cancel</button>
-      <button class="btn btn-sage" onclick="saveTestimonial()">Save</button>
+    <div class="form-row">
+      <div class="form-group"><label>Customer Name *</label><input type="text" id="t-name" placeholder="e.g. Sari W."></div>
+      <div class="form-group"><label>Rating (1–5)</label><input type="number" id="t-rating" min="1" max="5" value="5"></div>
+    </div>
+    <div class="form-group"><label>Review Text *</label><textarea id="t-text" placeholder="What did they say..."></textarea></div>
+    <div class="form-group"><label>Date</label><input type="text" id="t-date" placeholder="e.g. May 2025"></div>
+    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--gray-light)">
+      <button class="btn btn-outline" onclick="closeModal('testimonial-modal')" style="padding:10px 20px">Cancel</button>
+      <button class="btn btn-sage" onclick="saveTestimonial()" style="padding:10px 20px">Save Review</button>
     </div>
   </div>
 </div>
 
 <script src="main.js"></script>
 <script>
-// Auth
-function doLogin(){
-  const u=document.getElementById('login-user').value;
-  const p=document.getElementById('login-pass').value;
-  if(u==='admin' && p==='aura2025'){
-    sessionStorage.setItem('aura_admin','1');
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('admin-app').style.display='flex';
+/* ===== AUTH ===== */
+function doLogin() {
+  const u = document.getElementById('login-user').value;
+  const p = document.getElementById('login-pass').value;
+  const storedPass = localStorage.getItem('aura_admin_pass') || 'aura2025';
+  if (u === 'admin' && p === storedPass) {
+    sessionStorage.setItem('aura_admin', '1');
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-app').style.display = 'flex';
     initAdmin();
-  } else { showToastAdmin('Wrong credentials','error'); }
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('login-pass').value = '';
+  }
 }
-function doLogout(){ sessionStorage.removeItem('aura_admin'); location.reload(); }
-document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 
-if(sessionStorage.getItem('aura_admin')==='1'){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('admin-app').style.display='flex';
+function doLogout() {
+  sessionStorage.removeItem('aura_admin');
+  location.reload();
+}
+
+document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('login-user').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-pass').focus(); });
+
+if (sessionStorage.getItem('aura_admin') === '1') {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-app').style.display = 'flex';
   document.addEventListener('DOMContentLoaded', initAdmin);
 }
 
-// Panels
-function switchPanel(id, el){
-  event.preventDefault();
-  document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-'+id)?.classList.add('active');
-  document.querySelectorAll('.admin-nav a').forEach(a=>a.classList.remove('active'));
-  el.classList.add('active');
-  const titles={dashboard:'Dashboard',products:'Products',homepage:'Homepage',brand:'Brand Settings',testimonials:'Testimonials'};
-  document.getElementById('panel-title').textContent = titles[id]||id;
-  if(id==='products') renderProductsTable();
-  if(id==='homepage') loadHomepageForm();
-  if(id==='brand') loadBrandForm();
-  if(id==='testimonials') renderTestimonials();
+/* ===== PANELS ===== */
+const panelTitles = {
+  dashboard: 'Dashboard', products: 'Products', homepage: 'Homepage',
+  brand: 'Brand Settings', testimonials: 'Customer Reviews',
+  orders: 'Orders', preview: 'Live Preview'
+};
+
+function switchPanel(id, el) {
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id)?.classList.add('active');
+  document.querySelectorAll('.admin-nav a').forEach(a => a.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('panel-title').textContent = panelTitles[id] || id;
+  if (id === 'products') renderProductsTable();
+  if (id === 'homepage') loadHomepageForm();
+  if (id === 'brand') loadBrandForm();
+  if (id === 'testimonials') renderTestimonials();
+  if (id === 'orders') renderOrders();
+  if (id === 'preview') loadPreviewPage();
+  if (id === 'dashboard') refreshDashboard();
 }
 
-function initAdmin(){
-  const d=DataManager.get();
-  document.getElementById('stat-products').textContent=d.products.length;
-  document.getElementById('stat-instock').textContent=d.products.filter(p=>p.stock).length;
-  document.getElementById('stat-reviews').textContent=d.testimonials.length;
-  document.getElementById('dash-products').innerHTML=d.products.slice(0,4).map(p=>`
-    <div style="width:120px;cursor:pointer" onclick="switchPanel('products',document.querySelector('[data-panel=products]'))">
-      <img src="${p.image}" style="width:120px;height:120px;object-fit:cover;border-radius:6px">
-      <p style="font-size:13px;margin-top:6px;font-weight:600">${p.name}</p>
-      <p style="font-size:12px;color:var(--gray)">IDR ${fmt(p.price)}</p>
+/* ===== INIT ===== */
+function initAdmin() {
+  refreshDashboard();
+}
+
+function refreshDashboard() {
+  const d = DataManager.get();
+  const orders = JSON.parse(localStorage.getItem('aura_orders') || '[]');
+  document.getElementById('stat-products').textContent = d.products.length;
+  document.getElementById('stat-instock').textContent = d.products.filter(p => p.stock).length;
+  document.getElementById('stat-reviews').textContent = d.testimonials.length;
+  document.getElementById('stat-orders').textContent = orders.length;
+
+  document.getElementById('dash-products').innerHTML = d.products.slice(0, 5).map(p => `
+    <div style="width:110px;cursor:pointer;flex-shrink:0" onclick="switchPanel('products',document.querySelector('.admin-nav a[onclick*=products]'))">
+      <img src="${p.image}" style="width:110px;height:110px;object-fit:cover;border-radius:8px;margin-bottom:8px">
+      <p style="font-size:12px;font-weight:700;line-height:1.3">${p.name}</p>
+      <p style="font-size:11px;color:var(--gray)">IDR ${fmt(p.price)}</p>
     </div>`).join('');
 }
 
-// Products Table
-function renderProductsTable(){
-  const d=DataManager.get();
-  document.getElementById('products-tbody').innerHTML=d.products.map(p=>`
+/* ===== PRODUCTS ===== */
+function renderProductsTable() {
+  const d = DataManager.get();
+  document.getElementById('products-tbody').innerHTML = d.products.map(p => `
     <tr>
       <td><img src="${p.image}" alt="${p.name}"></td>
       <td><strong>${p.name}</strong></td>
       <td>IDR ${fmt(p.price)}</td>
-      <td>${p.category}</td>
-      <td><span class="badge-pill ${p.stock?'badge-active':'badge-soldout'}">${p.stock?'In Stock':'Sold Out'}</span></td>
-      <td>${p.badge||'—'}</td>
+      <td style="text-transform:capitalize">${p.category}</td>
+      <td><span class="badge-pill ${p.stock ? 'badge-active' : 'badge-soldout'}">${p.stock ? 'In Stock' : 'Sold Out'}</span></td>
+      <td>${p.badge || '<span style="color:var(--gray)">—</span>'}</td>
       <td><div class="table-actions">
         <button class="action-btn action-edit" onclick="openProductModal(${p.id})">Edit</button>
         <button class="action-btn action-delete" onclick="deleteProduct(${p.id})">Delete</button>
@@ -274,135 +491,167 @@ function renderProductsTable(){
     </tr>`).join('');
 }
 
-function openProductModal(id){
+function openProductModal(id) {
   document.getElementById('product-modal-title').textContent = id ? 'Edit Product' : 'Add Product';
-  document.getElementById('edit-id').value = id||'';
-  document.getElementById('p-img-prev').style.display='none';
-  if(id){
-    const p=DataManager.get().products.find(p=>p.id===id);
-    document.getElementById('p-name').value=p.name;
-    document.getElementById('p-price').value=p.price;
-    document.getElementById('p-orig').value=p.originalPrice||0;
-    document.getElementById('p-cat').value=p.category;
-    document.getElementById('p-badge').value=p.badge||'';
-    document.getElementById('p-stock').checked=p.stock;
-    document.getElementById('p-img').value=p.image;
-    document.getElementById('p-desc').value=p.description;
-    document.getElementById('p-notes').value=p.notes.join(', ');
-    document.getElementById('p-vibe').value=p.vibe||'';
-    document.getElementById('p-tune').value=p.tune||'';
-    previewImg('p-img','p-img-prev');
+  document.getElementById('edit-id').value = id || '';
+  document.getElementById('p-img-prev').style.display = 'none';
+  if (id) {
+    const p = DataManager.get().products.find(p => p.id === id);
+    if (!p) return;
+    document.getElementById('p-name').value = p.name;
+    document.getElementById('p-price').value = p.price;
+    document.getElementById('p-orig').value = p.originalPrice || 0;
+    document.getElementById('p-cat').value = p.category;
+    document.getElementById('p-badge').value = p.badge || '';
+    document.getElementById('p-stock').checked = p.stock;
+    document.getElementById('p-img').value = p.image;
+    document.getElementById('p-desc').value = p.description;
+    document.getElementById('p-notes').value = p.notes.join(', ');
+    document.getElementById('p-vibe').value = p.vibe || '';
+    document.getElementById('p-tune').value = p.tune || '';
+    previewImg('p-img', 'p-img-prev');
   } else {
-    ['p-name','p-price','p-orig','p-img','p-desc','p-notes','p-vibe','p-tune'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('p-stock').checked=true;
-    document.getElementById('p-badge').value='';
-    document.getElementById('p-orig').value=0;
+    ['p-name', 'p-price', 'p-img', 'p-desc', 'p-notes', 'p-vibe', 'p-tune'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('p-orig').value = 0;
+    document.getElementById('p-stock').checked = true;
+    document.getElementById('p-badge').value = '';
   }
   document.getElementById('product-modal').classList.add('open');
 }
 
-function saveProduct(){
-  const d=DataManager.get();
-  const id=document.getElementById('edit-id').value;
-  const product={
+function saveProduct() {
+  const d = DataManager.get();
+  const id = document.getElementById('edit-id').value;
+  const name = document.getElementById('p-name').value.trim();
+  const price = parseInt(document.getElementById('p-price').value);
+  if (!name) { showToastAdmin('Product name is required', 'error'); return; }
+  if (!price || price <= 0) { showToastAdmin('Valid price is required', 'error'); return; }
+
+  const product = {
     id: id ? parseInt(id) : Date.now(),
-    name: document.getElementById('p-name').value,
-    price: parseInt(document.getElementById('p-price').value)||0,
-    originalPrice: parseInt(document.getElementById('p-orig').value)||0,
+    name,
+    price,
+    originalPrice: parseInt(document.getElementById('p-orig').value) || 0,
     category: document.getElementById('p-cat').value,
     badge: document.getElementById('p-badge').value,
     stock: document.getElementById('p-stock').checked,
-    image: document.getElementById('p-img').value||'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=600&q=80',
+    image: document.getElementById('p-img').value || 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=600&q=80',
     description: document.getElementById('p-desc').value,
-    notes: document.getElementById('p-notes').value.split(',').map(s=>s.trim()).filter(Boolean),
+    notes: document.getElementById('p-notes').value.split(',').map(s => s.trim()).filter(Boolean),
     vibe: document.getElementById('p-vibe').value,
     tune: document.getElementById('p-tune').value
   };
-  if(!product.name){ showToastAdmin('Product name is required','error'); return; }
-  if(id){ const idx=d.products.findIndex(p=>p.id===parseInt(id)); if(idx!==-1) d.products[idx]=product; }
-  else d.products.push(product);
+
+  if (id) {
+    const idx = d.products.findIndex(p => p.id === parseInt(id));
+    if (idx !== -1) d.products[idx] = product;
+  } else {
+    d.products.push(product);
+  }
   DataManager.save(d);
   closeModal('product-modal');
   renderProductsTable();
-  showToastAdmin('Product saved!');
+  refreshDashboard();
+  showToastAdmin('Product saved ✓');
 }
 
-function deleteProduct(id){
-  if(!confirm('Delete this product?')) return;
-  const d=DataManager.get();
-  d.products=d.products.filter(p=>p.id!==id);
+function deleteProduct(id) {
+  if (!confirm('Delete this product permanently?')) return;
+  const d = DataManager.get();
+  d.products = d.products.filter(p => p.id !== id);
   DataManager.save(d);
   renderProductsTable();
-  showToastAdmin('Product deleted.');
+  refreshDashboard();
+  showToastAdmin('Product deleted');
 }
 
-// Homepage Form
-function loadHomepageForm(){
-  const d=DataManager.get();
-  document.getElementById('hero-title').value=d.hero.title;
-  document.getElementById('hero-subtitle').value=d.hero.subtitle;
-  document.getElementById('hero-cta').value=d.hero.cta;
-  document.getElementById('hero-image').value=d.hero.image;
-  document.getElementById('feat-title').value=d.sections.featuredTitle;
-  document.getElementById('feat-desc').value=d.sections.featuredDesc;
-  document.getElementById('try-title').value=d.sections.tryTitle;
-  document.getElementById('try-desc').value=d.sections.tryDesc;
-  document.getElementById('press-list').value=d.sections.press.join(', ');
-  previewImg('hero-image','hero-img-prev');
+/* ===== HOMEPAGE ===== */
+function loadHomepageForm() {
+  const d = DataManager.get();
+  document.getElementById('hero-title').value = d.hero.title;
+  document.getElementById('hero-subtitle').value = d.hero.subtitle;
+  document.getElementById('hero-cta').value = d.hero.cta;
+  document.getElementById('hero-image').value = d.hero.image;
+  document.getElementById('feat-title').value = d.sections.featuredTitle;
+  document.getElementById('feat-desc').value = d.sections.featuredDesc;
+  document.getElementById('try-title').value = d.sections.tryTitle;
+  document.getElementById('try-desc').value = d.sections.tryDesc;
+  document.getElementById('press-list').value = d.sections.press.join(', ');
+  previewImg('hero-image', 'hero-img-prev');
 }
 
-// Brand Form
-function loadBrandForm(){
-  const d=DataManager.get();
-  document.getElementById('brand-name').value=d.brand.name;
-  document.getElementById('brand-ann').value=d.brand.announcement;
-  document.getElementById('brand-about').value=d.brand.about;
-  document.getElementById('brand-email').value=d.brand.email||'';
+/* ===== BRAND ===== */
+function loadBrandForm() {
+  const d = DataManager.get();
+  document.getElementById('brand-name').value = d.brand.name;
+  document.getElementById('brand-ann').value = d.brand.announcement;
+  document.getElementById('brand-about').value = d.brand.about;
+  document.getElementById('brand-email').value = d.brand.email || '';
 }
 
-// Auto-save
+function changePassword() {
+  const np = document.getElementById('new-pass').value;
+  const cp = document.getElementById('confirm-pass').value;
+  if (!np || np.length < 4) { showToastAdmin('Password must be at least 4 characters', 'error'); return; }
+  if (np !== cp) { showToastAdmin('Passwords do not match', 'error'); return; }
+  localStorage.setItem('aura_admin_pass', np);
+  document.getElementById('new-pass').value = '';
+  document.getElementById('confirm-pass').value = '';
+  showToastAdmin('Password updated ✓');
+}
+
+/* ===== AUTO SAVE ===== */
 let saveTimer;
-function autoSave(){
+function autoSave() {
   clearTimeout(saveTimer);
-  saveTimer=setTimeout(()=>{
-    const d=DataManager.get();
-    // hero
-    if(document.getElementById('hero-title')) {
-      d.hero.title=document.getElementById('hero-title').value;
-      d.hero.subtitle=document.getElementById('hero-subtitle').value;
-      d.hero.cta=document.getElementById('hero-cta').value;
-      d.hero.image=document.getElementById('hero-image').value;
+  document.getElementById('saved-btn').style.opacity = '0.6';
+  saveTimer = setTimeout(() => {
+    const d = DataManager.get();
+    const heroTitle = document.getElementById('hero-title');
+    if (heroTitle) {
+      d.hero.title = heroTitle.value;
+      d.hero.subtitle = document.getElementById('hero-subtitle').value;
+      d.hero.cta = document.getElementById('hero-cta').value;
+      d.hero.image = document.getElementById('hero-image').value;
     }
-    if(document.getElementById('feat-title')) {
-      d.sections.featuredTitle=document.getElementById('feat-title').value;
-      d.sections.featuredDesc=document.getElementById('feat-desc').value;
-      d.sections.tryTitle=document.getElementById('try-title').value;
-      d.sections.tryDesc=document.getElementById('try-desc').value;
-      d.sections.press=document.getElementById('press-list').value.split(',').map(s=>s.trim()).filter(Boolean);
+    const featTitle = document.getElementById('feat-title');
+    if (featTitle) {
+      d.sections.featuredTitle = featTitle.value;
+      d.sections.featuredDesc = document.getElementById('feat-desc').value;
+      d.sections.tryTitle = document.getElementById('try-title').value;
+      d.sections.tryDesc = document.getElementById('try-desc').value;
+      d.sections.press = document.getElementById('press-list').value.split(',').map(s => s.trim()).filter(Boolean);
     }
-    if(document.getElementById('brand-name')) {
-      d.brand.name=document.getElementById('brand-name').value;
-      d.brand.announcement=document.getElementById('brand-ann').value;
-      d.brand.about=document.getElementById('brand-about').value;
-      d.brand.email=document.getElementById('brand-email').value;
+    const brandName = document.getElementById('brand-name');
+    if (brandName) {
+      d.brand.name = brandName.value;
+      d.brand.announcement = document.getElementById('brand-ann').value;
+      d.brand.about = document.getElementById('brand-about').value;
+      d.brand.email = document.getElementById('brand-email').value;
     }
     DataManager.save(d);
+    document.getElementById('saved-btn').style.opacity = '1';
     showToastAdmin('Auto-saved ✓');
-  },800);
+  }, 700);
 }
 
-// Testimonials
-function renderTestimonials(){
-  const d=DataManager.get();
-  document.getElementById('testimonials-list').innerHTML=d.testimonials.map((t,i)=>`
+/* ===== TESTIMONIALS ===== */
+function renderTestimonials() {
+  const d = DataManager.get();
+  if (d.testimonials.length === 0) {
+    document.getElementById('testimonials-list').innerHTML = '<p style="color:var(--gray);font-size:14px">No reviews yet. Add your first one!</p>';
+    return;
+  }
+  document.getElementById('testimonials-list').innerHTML = d.testimonials.map((t, i) => `
     <div class="card" style="margin-bottom:12px">
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
         <div>
-          <strong>${t.name}</strong> <span style="color:var(--gold)">${'★'.repeat(t.rating)}</span>
-          <p style="color:var(--gray);font-size:14px;margin-top:6px">"${t.text}"</p>
+          <strong style="font-size:14px">${t.name}</strong>
+          <span style="color:var(--gold);margin-left:8px">${'★'.repeat(t.rating)}${'☆'.repeat(5-t.rating)}</span>
+          <p style="color:var(--gray);font-size:14px;margin-top:6px;line-height:1.6">"${t.text}"</p>
           <p style="font-size:12px;color:var(--gray);margin-top:4px">${t.date}</p>
         </div>
-        <div style="display:flex;gap:8px">
+        <div style="display:flex;gap:8px;flex-shrink:0;margin-left:16px">
           <button class="action-btn action-edit" onclick="editTestimonial(${i})">Edit</button>
           <button class="action-btn action-delete" onclick="deleteTestimonial(${i})">Delete</button>
         </div>
@@ -410,21 +659,135 @@ function renderTestimonials(){
     </div>`).join('');
 }
 
-function openTestimonialModal(){ document.getElementById('t-edit-idx').value=''; ['t-name','t-text','t-date'].forEach(id=>document.getElementById(id).value=''); document.getElementById('t-rating').value=5; document.getElementById('testimonial-modal').classList.add('open'); }
+function openTestimonialModal() {
+  document.getElementById('t-modal-title').textContent = 'Add Review';
+  document.getElementById('t-edit-idx').value = '';
+  ['t-name', 't-text', 't-date'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('t-rating').value = 5;
+  document.getElementById('testimonial-modal').classList.add('open');
+}
 
-function editTestimonial(i){ const t=DataManager.get().testimonials[i]; document.getElementById('t-edit-idx').value=i; document.getElementById('t-name').value=t.name; document.getElementById('t-rating').value=t.rating; document.getElementById('t-text').value=t.text; document.getElementById('t-date').value=t.date; document.getElementById('testimonial-modal').classList.add('open'); }
+function editTestimonial(i) {
+  const t = DataManager.get().testimonials[i];
+  document.getElementById('t-modal-title').textContent = 'Edit Review';
+  document.getElementById('t-edit-idx').value = i;
+  document.getElementById('t-name').value = t.name;
+  document.getElementById('t-rating').value = t.rating;
+  document.getElementById('t-text').value = t.text;
+  document.getElementById('t-date').value = t.date;
+  document.getElementById('testimonial-modal').classList.add('open');
+}
 
-function saveTestimonial(){ const d=DataManager.get(); const i=document.getElementById('t-edit-idx').value; const t={name:document.getElementById('t-name').value,rating:parseInt(document.getElementById('t-rating').value),text:document.getElementById('t-text').value,date:document.getElementById('t-date').value}; if(!t.name||!t.text){showToastAdmin('Fill in name and text','error');return;} if(i!=='') d.testimonials[parseInt(i)]=t; else d.testimonials.push(t); DataManager.save(d); closeModal('testimonial-modal'); renderTestimonials(); showToastAdmin('Saved!'); }
+function saveTestimonial() {
+  const d = DataManager.get();
+  const i = document.getElementById('t-edit-idx').value;
+  const name = document.getElementById('t-name').value.trim();
+  const text = document.getElementById('t-text').value.trim();
+  if (!name || !text) { showToastAdmin('Name and review text are required', 'error'); return; }
+  const t = {
+    name, rating: parseInt(document.getElementById('t-rating').value) || 5,
+    text, date: document.getElementById('t-date').value || new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'})
+  };
+  if (i !== '') d.testimonials[parseInt(i)] = t;
+  else d.testimonials.push(t);
+  DataManager.save(d);
+  closeModal('testimonial-modal');
+  renderTestimonials();
+  showToastAdmin('Review saved ✓');
+}
 
-function deleteTestimonial(i){ if(!confirm('Delete?')) return; const d=DataManager.get(); d.testimonials.splice(i,1); DataManager.save(d); renderTestimonials(); }
+function deleteTestimonial(i) {
+  if (!confirm('Delete this review?')) return;
+  const d = DataManager.get();
+  d.testimonials.splice(i, 1);
+  DataManager.save(d);
+  renderTestimonials();
+}
 
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+/* ===== ORDERS ===== */
+function renderOrders() {
+  const orders = JSON.parse(localStorage.getItem('aura_orders') || '[]');
+  const el = document.getElementById('orders-list');
+  if (orders.length === 0) {
+    el.innerHTML = '<div class="card"><p style="color:var(--gray);font-size:14px">No orders yet. Orders will appear here after customers checkout.</p></div>';
+    return;
+  }
+  const d = DataManager.get();
+  el.innerHTML = orders.map(o => {
+    const itemImgs = o.items.slice(0, 4).map(i => {
+      const p = d.products.find(p => p.id === i.id);
+      return p ? `<img class="order-thumb" src="${p.image}" title="${p.name}">` : '';
+    }).join('');
+    const dateStr = new Date(o.date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    return `<div class="order-card">
+      <div class="order-card-head">
+        <div>
+          <div class="order-num">${o.id}</div>
+          <div class="order-date">${dateStr}</div>
+          <div style="margin-top:4px;font-size:13px;color:var(--gray)">${o.customer.name} · ${o.customer.email}</div>
+          <div style="font-size:12px;color:var(--gray)">${o.customer.city}, ${o.customer.province}</div>
+        </div>
+        <div style="text-align:right">
+          <span class="order-status">Pending Payment</span>
+          <div class="order-total" style="margin-top:8px;font-size:15px">IDR ${fmt(o.total)}</div>
+          <div style="font-size:12px;color:var(--gray);margin-top:2px">via ${(o.payment||'').toUpperCase()}</div>
+        </div>
+      </div>
+      <div class="order-items-preview">${itemImgs}</div>
+      <div class="order-meta">
+        <span>${o.items.length} item${o.items.length !== 1 ? 's' : ''}</span>
+        <span>Shipping: ${o.shipping === 0 ? 'FREE' : 'IDR ' + fmt(o.shipping)}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
 
-function previewImg(inputId, previewId){ const v=document.getElementById(inputId).value; const img=document.getElementById(previewId); if(v){ img.src=v; img.style.display='block'; } else { img.style.display='none'; } }
+function clearOrders() {
+  if (!confirm('Clear all order history? This cannot be undone.')) return;
+  localStorage.removeItem('aura_orders');
+  renderOrders();
+  refreshDashboard();
+  showToastAdmin('Orders cleared');
+}
 
-function resetData(){ if(confirm('Reset all data to defaults? This cannot be undone.')) { DataManager.reset(); showToastAdmin('Reset complete. Reloading...'); setTimeout(()=>location.reload(),1000); } }
+/* ===== PREVIEW ===== */
+function setPreviewDevice(btn, width) {
+  document.querySelectorAll('.preview-device-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const wrap = document.getElementById('preview-frame-wrap');
+  const frame = document.getElementById('preview-frame');
+  wrap.style.width = width;
+  frame.style.width = width === '100%' ? '100%' : width;
+}
 
-function showToastAdmin(msg, t='ok'){ const el=document.createElement('div'); el.className='toast'+(t==='error'?' toast-error':''); el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.classList.add('show'),10); setTimeout(()=>{ el.classList.remove('show'); setTimeout(()=>el.remove(),300); },2200); }
+function loadPreviewPage() {
+  const sel = document.getElementById('preview-page-select');
+  const page = sel.value;
+  document.getElementById('preview-frame').src = page;
+  document.getElementById('preview-open-link').href = page;
+}
+
+/* ===== UTILS ===== */
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function previewImg(inputId, previewId) {
+  const v = document.getElementById(inputId).value;
+  const img = document.getElementById(previewId);
+  if (v) { img.src = v; img.style.display = 'block'; } else { img.style.display = 'none'; }
+}
+function resetData() {
+  if (!confirm('Reset ALL data to defaults? This cannot be undone.')) return;
+  DataManager.reset();
+  showToastAdmin('Reset complete. Reloading...');
+  setTimeout(() => location.reload(), 1000);
+}
+function showToastAdmin(msg, t = 'ok') {
+  const el = document.createElement('div');
+  el.className = 'toast' + (t === 'error' ? ' toast-error' : '');
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.classList.add('show'), 10);
+  setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 300); }, 2500);
+}
 </script>
 </body>
 </html>
