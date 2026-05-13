@@ -20,7 +20,10 @@ const DEFAULT_DATA = {
     featuredDesc: "Our fragrances can be worn individually or layered — that's what makes us special.",
     tryTitle: "Try First, Commit Later",
     tryDesc: "Try our Scent Designer Kit before committing to a full bottle. 7 travel-size samples, one designer case.",
-    press: ["VOGUE", "FIMELA", "COSMOPOLITAN", "ELLE"]
+    press: ["VOGUE", "FIMELA", "COSMOPOLITAN", "ELLE"],
+    shopHeroTitle: "Discover Our Collection",
+    shopHeroSub: "Our fragrances are completely genderless — wear what speaks to you.",
+    shopHeroImage: "https://images.unsplash.com/photo-1594897030264-ab7d87efc473?w=1200&q=80"
   },
   products: [
     { id: 1, name: "Floraison", price: 401000, originalPrice: 0, category: "feminine", badge: "", image: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=600&q=80", description: "Modern yet timeless. This classic bouquet states romance and beauty with modern boldness.", notes: ["Peony", "Rose Otto", "Lychee", "Pink Pepper", "White Musk", "Patchouli"], vibe: "Vacation oasis near the ocean.", tune: "El Shaddai - Dylan Sin", stock: true },
@@ -299,6 +302,9 @@ const AdminBar = {
       'hero.image': () => { const bg = document.getElementById('hero-bg'); if (bg) bg.style.backgroundImage = `url('${val}')`; },
       'brand.announcement': () => document.querySelectorAll('[data-ann]').forEach(e => e.textContent = val),
       'brand.name': () => document.querySelectorAll('[data-brand]').forEach(e => e.textContent = val),
+      'sections.shopHeroTitle': () => { const el = document.getElementById('shop-hero-title'); if (el) el.textContent = val; },
+      'sections.shopHeroSub': () => { const el = document.getElementById('shop-hero-sub'); if (el) el.textContent = val; },
+      'sections.shopHeroImage': () => { const el = document.getElementById('shop-hero-bg'); if (el) el.style.backgroundImage = `url('${val}')`; },
     };
     specials[key]?.();
 
