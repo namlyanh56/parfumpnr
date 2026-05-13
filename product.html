@@ -175,13 +175,40 @@
 
 <script src="main.js"></script>
 <script>
-const NOTE_EMOJI = {
-  "Peony":"🌸","Rose Otto":"🌹","Lychee":"🍈","Pink Pepper":"🌶","White Musk":"✨",
-  "Patchouli":"🌿","Iris":"💜","Violet":"🫐","Sandalwood":"🪵","Ambergris":"🌊",
-  "Bergamot":"🍊","Cashmere":"🧶","Vetiver":"🌾","Oakmoss":"🌲","Leather":"🟤",
-  "Tobacco":"🍂","Amber":"🟡","Cedar":"🌲","Oud":"🪵","Cardamom":"🌿",
-  "Saffron":"🌼","Vanilla":"🌾","Incense":"🕯","Musk":"✨","All 7 scents included":"🎁"
-};
+// Phosphor-style inline SVG icons for fragrance notes
+// Each icon is a 24×24 stroke SVG — no CDN required.
+const NOTE_ICONS = (() => {
+  const ic = (body) => `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+
+  const flower   = ic(`<circle cx="12" cy="12" r="2"/><ellipse cx="12" cy="6.5" rx="1.8" ry="3"/><ellipse cx="12" cy="17.5" rx="1.8" ry="3"/><ellipse cx="6.5" cy="12" rx="3" ry="1.8"/><ellipse cx="17.5" cy="12" rx="3" ry="1.8"/><ellipse cx="8.2" cy="8.2" rx="3" ry="1.8" transform="rotate(-45 8.2 8.2)"/><ellipse cx="15.8" cy="15.8" rx="3" ry="1.8" transform="rotate(-45 15.8 15.8)"/><ellipse cx="15.8" cy="8.2" rx="3" ry="1.8" transform="rotate(45 15.8 8.2)"/><ellipse cx="8.2" cy="15.8" rx="3" ry="1.8" transform="rotate(45 8.2 15.8)"/>`);
+  const leaf     = ic(`<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>`);
+  const tree     = ic(`<path d="M12 22v-7"/><path d="M10.3 14.8 5 9.5h14L13.7 14.8"/><path d="M10 9.5 6 5.5h12l-4 4"/><path d="M10.5 5.5 8 3h8l-2.5 2.5"/>`);
+  const drop     = ic(`<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-1.5-4.5L12 2l-5.5 8.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>`);
+  const flame    = ic(`<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>`);
+  const sparkle  = ic(`<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/>`);
+  const wave     = ic(`<path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2"/>`);
+  const wind     = ic(`<path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>`);
+  const diamond  = ic(`<path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.57a2.41 2.41 0 0 0 3.41 0l7.57-7.56a2.41 2.41 0 0 0 0-3.41L13.7 2.72a2.41 2.41 0 0 0-3.41 0z"/>`);
+  const briefcase= ic(`<rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="12"/><path d="M2 12h20"/>`);
+  const citrus   = ic(`<circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M6.3 6.3l11.4 11.4M17.7 6.3 6.3 17.7"/>`);
+  const gift     = ic(`<rect x="3" y="8" width="18" height="13" rx="1"/><path d="M12 8V21"/><path d="M3 13h18"/><path d="M19 8a3 3 0 1 0-5-3M5 8a3 3 0 1 1 5-3"/>`);
+  const smoke    = ic(`<path d="M14 14.5a4 4 0 1 1-8 0c0-4 4-6 4-6s4 2 4 6z"/><path d="M9 3c0 3 3 3 3 6"/><path d="M13 3c0 3 3 3 3 6"/>`);
+
+  return {
+    "Peony":      flower,   "Rose Otto":  flower,   "Iris":      flower,
+    "Violet":     flower,   "Saffron":    flower,
+    "Patchouli":  leaf,     "Cardamom":   leaf,     "Tobacco":   leaf,
+    "Vetiver":    leaf,     "Vanilla":    leaf,
+    "Sandalwood": tree,     "Oakmoss":    tree,     "Cedar":     tree,     "Oud": tree,
+    "Bergamot":   citrus,   "Lychee":     drop,
+    "Pink Pepper":flame,    "Incense":    smoke,
+    "White Musk": sparkle,  "Musk":       sparkle,
+    "Ambergris":  wave,     "Cashmere":   wind,
+    "Leather":    briefcase,
+    "Amber":      diamond,
+    "All 7 scents included": gift,
+  };
+})();
 
 // ===== BUG FIX: qty is kept in module-level var, exposed via named functions =====
 let _prodQty = 1;
@@ -310,7 +337,7 @@ function buyNow() {
   document.getElementById('tune-text').textContent = p.tune;
   document.getElementById('notes-grid').innerHTML = p.notes.map(n =>
     `<div class="note-item">
-      <div class="note-circle">${NOTE_EMOJI[n] || '🌸'}</div>
+      <div class="note-circle" style="display:flex;align-items:center;justify-content:center">${NOTE_ICONS[n] || NOTE_ICONS["Peony"]}</div>
       <span>${n}</span>
     </div>`
   ).join('');
