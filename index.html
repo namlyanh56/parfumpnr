@@ -8,10 +8,8 @@
 </head>
 <body>
 
-<!-- ANNOUNCEMENT -->
 <div class="announcement-bar"><span data-ann></span></div>
 
-<!-- NAVBAR -->
 <nav class="navbar">
   <button id="hamburger" class="nav-icon-btn" aria-label="Menu">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -34,7 +32,6 @@
   </div>
 </nav>
 
-<!-- MOBILE NAV -->
 <div id="mobile-nav">
   <div class="mobile-nav-panel">
     <div class="mobile-nav-header">
@@ -52,7 +49,6 @@
   </div>
 </div>
 
-<!-- CART SIDEBAR -->
 <div id="cart-overlay"></div>
 <div id="cart-sidebar">
   <div class="cart-header">
@@ -63,11 +59,8 @@
   </div>
   <div id="cart-items"></div>
   <div class="cart-footer">
-    <div class="cart-total-row">
-      <span>Total</span>
-      <span>IDR <span id="cart-total">0</span></span>
-    </div>
-    <button class="btn btn-dark btn-full">Checkout</button>
+    <div class="cart-total-row"><span>Subtotal</span><span>IDR <span id="cart-total">0</span></span></div>
+    <a href="checkout.html" class="btn btn-dark btn-full" style="display:flex">Checkout</a>
   </div>
 </div>
 
@@ -75,21 +68,21 @@
 <section class="hero" id="hero">
   <div class="hero-bg" id="hero-bg"></div>
   <div class="hero-content">
-    <h1 id="hero-title"></h1>
-    <p id="hero-subtitle"></p>
+    <h1 id="hero-title" data-ek="hero.title"></h1>
+    <p id="hero-subtitle" data-ek="hero.subtitle"></p>
     <a href="shop.html" class="btn btn-outline" style="background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.5);backdrop-filter:blur(8px)" id="hero-cta"></a>
   </div>
 </section>
 
 <!-- FEATURED BANNER -->
-<section class="featured-banner fade-in" id="featured-section">
+<section class="featured-banner fade-in">
   <div class="featured-img">
     <img src="https://images.unsplash.com/photo-1547887538-e1d4ab6d2e90?w=800&q=80" alt="Fragrance collection">
   </div>
   <div class="featured-text">
     <div class="featured-text-inner">
-      <h2 id="featured-title"></h2>
-      <p id="featured-desc"></p>
+      <h2 id="featured-title" data-ek="sections.featuredTitle"></h2>
+      <p id="featured-desc" data-ek="sections.featuredDesc"></p>
       <a href="shop.html" class="btn btn-dark">Start Layering</a>
     </div>
   </div>
@@ -114,8 +107,8 @@
   <div class="container">
     <div class="try-section fade-in">
       <div class="try-text">
-        <h2 id="try-title"></h2>
-        <p id="try-desc"></p>
+        <h2 id="try-title" data-ek="sections.tryTitle"></h2>
+        <p id="try-desc" data-ek="sections.tryDesc"></p>
         <a href="shop.html" class="btn btn-sage">Discover More</a>
       </div>
       <div class="try-img">
@@ -138,13 +131,31 @@
   </div>
 </section>
 
-<!-- TRUST -->
+<!-- TRUST BAR — SVG icons instead of emoji -->
 <div class="trust-bar fade-in">
   <div class="container">
     <div class="trust-grid">
-      <div class="trust-item"><div class="trust-icon">🔒</div><strong>Secure Payments</strong><span>Verified & encrypted transactions</span></div>
-      <div class="trust-item"><div class="trust-icon">🚚</div><strong>Free Shipping</strong><span>Orders above IDR 700.000</span></div>
-      <div class="trust-item"><div class="trust-icon">↩️</div><strong>Free Returns</strong><span>Hassle-free within 30 days</span></div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <strong>Secure Payments</strong>
+        <span>Verified &amp; encrypted transactions</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 4v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <strong>Free Shipping</strong>
+        <span>Orders above IDR 700.000</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        </div>
+        <strong>Free Returns</strong>
+        <span>Hassle-free within 30 days</span>
+      </div>
     </div>
   </div>
 </div>
@@ -156,8 +167,8 @@
       <h2>Wanna Be Pen Pals?</h2>
       <p>Join the aura. crew and get exclusive deals, new launches, and fragrance inspiration.</p>
       <div class="newsletter-form">
-        <input type="email" placeholder="Enter your email address">
-        <button class="btn btn-dark">Subscribe</button>
+        <input type="email" placeholder="Enter your email address" id="nl-email">
+        <button class="btn btn-dark" id="nl-btn">Subscribe</button>
       </div>
     </div>
   </div>
@@ -169,19 +180,19 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <span class="brand" data-brand></span>
-        <p id="footer-about"></p>
+        <p id="footer-about" data-ek="brand.about"></p>
         <div class="social-links">
-          <a href="#" class="social-link">f</a>
-          <a href="#" class="social-link">tw</a>
-          <a href="#" class="social-link">ig</a>
+          <a href="#" class="social-link" aria-label="Facebook">f</a>
+          <a href="#" class="social-link" aria-label="Twitter">tw</a>
+          <a href="#" class="social-link" aria-label="Instagram">ig</a>
         </div>
       </div>
       <div class="footer-col">
-        <h4>Help & FAQs</h4>
+        <h4>Help &amp; FAQs</h4>
         <ul>
           <li><a href="#">Contact Us</a></li>
           <li><a href="#">FAQ</a></li>
-          <li><a href="#">Return & Exchange</a></li>
+          <li><a href="#">Return &amp; Exchange</a></li>
           <li><a href="#">Terms</a></li>
           <li><a href="#">Privacy Policy</a></li>
         </ul>
@@ -197,7 +208,7 @@
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">© <span data-brand></span> Perfumery. All rights reserved.</div>
+    <div class="footer-bottom">&copy; <span data-brand></span> Perfumery. All rights reserved.</div>
   </div>
 </footer>
 
@@ -212,11 +223,9 @@
   document.getElementById('hero-subtitle').textContent = d.hero.subtitle;
   document.getElementById('hero-cta').textContent = d.hero.cta;
 
-  // Featured
+  // Featured + Try
   document.getElementById('featured-title').textContent = d.sections.featuredTitle;
   document.getElementById('featured-desc').textContent = d.sections.featuredDesc;
-
-  // Try
   document.getElementById('try-title').textContent = d.sections.tryTitle;
   document.getElementById('try-desc').textContent = d.sections.tryDesc;
 
@@ -238,17 +247,15 @@
   ).join('');
 
   // Products
-  const noteIcons = { "Peony":"🌸","Rose Otto":"🌹","Lychee":"🍈","Pink Pepper":"🌶","White Musk":"✨","Patchouli":"🌿","Iris":"💜","Violet":"🌸","Sandalwood":"🪵","Ambergris":"🌊","Bergamot":"🍊","Cashmere":"🧶","Vetiver":"🌾","Oakmoss":"🌲","Leather":"🟤","Tobacco":"🍂","Amber":"🟡","Cedar":"🌲","Oud":"🪵","Cardamom":"🌿","Saffron":"🌼","Vanilla":"🌾","Incense":"🕯","Musk":"✨" };
-
-  function renderProducts(cat){
-    const prods = d.products.filter(p => p.category === cat).slice(0,4);
+  function renderProducts(cat) {
+    const prods = d.products.filter(p => p.category === cat).slice(0, 4);
     return prods.map(p => `
       <div class="product-card" onclick="location.href='product.html?id=${p.id}'">
         <div class="product-img-wrap">
           <img src="${p.image}" alt="${p.name}" loading="lazy">
           ${p.badge ? `<span class="product-badge ${p.badge==='Sold out'?'badge-sold':p.badge==='NEW'?'badge-new':'badge-best'}">${p.badge}</span>` : ''}
           <div class="product-overlay">
-            <button class="btn btn-outline" style="background:rgba(255,255,255,0.9);color:#000;border:none;width:100%" onclick="event.stopPropagation();addToCart(${p.id})">
+            <button class="btn btn-outline" style="background:rgba(255,255,255,0.92);color:#000;border:none;width:100%" onclick="event.stopPropagation();addToCart(${p.id})">
               ${p.stock ? 'Add to Cart' : 'Sold Out'}
             </button>
           </div>
@@ -270,6 +277,16 @@
       btn.classList.add('active');
       container.innerHTML = renderProducts(btn.dataset.tab);
     });
+  });
+
+  // Newsletter
+  document.getElementById('nl-btn').addEventListener('click', () => {
+    const email = document.getElementById('nl-email').value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast('Please enter a valid email', 'error'); return;
+    }
+    document.getElementById('nl-email').value = '';
+    showToast('Subscribed! Welcome to the crew ✦');
   });
 })();
 </script>
