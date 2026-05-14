@@ -173,6 +173,8 @@
   </div>
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script src="main.js"></script>
 <script>
 // Phosphor-style inline SVG icons for fragrance notes
@@ -240,12 +242,19 @@ function buyNow() {
   window.location.href = 'checkout.html';
 }
 
-(function(){
+(async function(){
   const d = DataManager.get();
   document.getElementById('footer-about').textContent = d.brand.about;
 
   const id = parseInt(new URLSearchParams(location.search).get('id'));
-  const p = d.products.find(pr => pr.id === id);
+  let p = d.products.find(pr => pr.id === id);
+
+  // Kalau tidak ketemu di cache, tunggu Firestore dulu lalu cari lagi
+  if (!p) {
+    await DataManager.ready();
+    const df = DataManager.get();
+    p = df.products.find(pr => pr.id === id);
+  }
 
   if (!p) {
     document.getElementById('product-detail').innerHTML = `
@@ -342,8 +351,8 @@ function buyNow() {
     </div>`
   ).join('');
 
-  // Related products
-  const related = d.products.filter(pr => pr.id !== p.id).slice(0, 4);
+  // Related products — gunakan data terbaru
+  const related = DataManager.get().products.filter(pr => pr.id !== p.id).slice(0, 4);
   document.getElementById('related-products').innerHTML = related.map(pr => `
     <div class="product-card" onclick="location.href='product.html?id=${pr.id}'">
       <div class="product-img-wrap">
