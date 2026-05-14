@@ -39,45 +39,65 @@ const DEFAULT_DATA = {
   ]
 };
 
-/* ===== DATA MANAGER ===== */
-// Paste Firebase config kamu di sini
+/* ===== FIREBASE CONFIG ===== */
+// Isi dengan config dari Firebase Console → Project Settings → Your Apps
 const firebaseConfig = {
-  apiKey: "PASTE_DARI_FIREBASE_CONSOLE",
-  authDomain: "xxx.firebaseapp.com",
-  projectId: "xxx",
+  apiKey:            "PASTE_API_KEY",
+  authDomain:        "PASTE_PROJECT_ID.firebaseapp.com",
+  projectId:         "PASTE_PROJECT_ID",
+  storageBucket:     "PASTE_PROJECT_ID.appspot.com",
+  messagingSenderId: "PASTE_SENDER_ID",
+  appId:             "PASTE_APP_ID"
 };
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const DOC = db.collection('aura').doc('sitedata');
+const _db  = firebase.firestore();
+const _DOC = _db.collection('aura').doc('sitedata');
+
+/* ===== DATA MANAGER ===== */
+// Strategi: cache-first
+//   • DataManager.get()   → SINKRON, baca dari localStorage
+//   • DataManager.save()  → tulis localStorage langsung + push Firestore async
+//   • DataManager.ready() → Promise; await sekali per halaman sebelum render pertama
+//     agar halaman selalu tampil data terbaru dari Firestore, bukan cache lama
+
+const _dataReady = (async () => {
+  try {
+    const snap = await _DOC.get();
+    if (snap.exists) {
+      localStorage.setItem('aura_data', JSON.stringify(snap.data()));
+    } else {
+      // Pertama kali pakai: push DEFAULT_DATA ke Firestore
+      const def = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      await _DOC.set(def);
+      localStorage.setItem('aura_data', JSON.stringify(def));
+    }
+  } catch (e) {
+    console.warn('[aura] Firestore tidak tersedia, pakai cache lokal:', e.message);
+  }
+})();
 
 const DataManager = {
-  // get() sekarang ASYNC — returns Promise
-  async get() {
+  /** Tunggu Firestore sync selesai. Panggil sekali di awal tiap halaman. */
+  ready() { return _dataReady; },
+
+  /** Baca data dari localStorage (sinkron, instant). */
+  get() {
     try {
-      const snap = await DOC.get();
-      if (snap.exists) return snap.data();
-      // Pertama kali: belum ada data di Firestore, pakai default
-      await DOC.set(JSON.parse(JSON.stringify(DEFAULT_DATA)));
-      return JSON.parse(JSON.stringify(DEFAULT_DATA));
-    } catch {
-      // Fallback ke localStorage kalau offline
-      try {
-        const s = localStorage.getItem('aura_data');
-        return s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT_DATA));
-      } catch { return JSON.parse(JSON.stringify(DEFAULT_DATA)); }
-    }
+      const s = localStorage.getItem('aura_data');
+      return s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT_DATA));
+    } catch { return JSON.parse(JSON.stringify(DEFAULT_DATA)); }
   },
 
-  async save(d) {
-    await DOC.set(d);
-    // Cache lokal sebagai backup offline
+  /** Tulis ke localStorage langsung, lalu push ke Firestore di background. */
+  save(d) {
     localStorage.setItem('aura_data', JSON.stringify(d));
+    _DOC.set(d).catch(e => console.warn('[aura] Firestore save gagal:', e.message));
   },
 
-  async reset() {
-    const def = JSON.parse(JSON.stringify(DEFAULT_DATA));
-    await DOC.set(def);
+  reset() {
     localStorage.removeItem('aura_data');
+    const def = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    _DOC.set(def).catch(e => console.warn('[aura] Firestore reset gagal:', e.message));
     return def;
   }
 };
@@ -354,7 +374,8 @@ const AdminBar = {
 };
 
 /* ===== DOM READY ===== */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await DataManager.ready();
   Cart.badge();
   const d = DataManager.get();
   document.querySelectorAll('[data-ann]').forEach(el => el.textContent = d.brand.announcement);
