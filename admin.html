@@ -444,6 +444,8 @@ body { background: #f0ede8; }
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script src="main.js"></script>
 <script>
 /* ===== LOCAL IMAGE UPLOAD ===== */
@@ -576,7 +578,8 @@ function switchPanel(id, el) {
 }
 
 /* ===== INIT ===== */
-function initAdmin() {
+async function initAdmin() {
+  await DataManager.ready();
   refreshDashboard();
 }
 
